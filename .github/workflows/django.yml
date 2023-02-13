@@ -32,5 +32,7 @@ jobs:
      - name: Build Django Project
        run: |
             pwd
-            cd .. && docker-compose build
+            cd ..
+            pwd
+            docker-compose build
    
