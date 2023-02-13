@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  buildpython:
 
     runs-on: ubuntu-latest
     strategy:
@@ -26,6 +26,7 @@ jobs:
         python -m pip install --upgrade pip
   
   builddjango:
+     needs: buildpython
      runs-on: ubuntu-latest
      steps:
      - name: Build Django Project
