@@ -30,5 +30,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
      - name: Build Django Project
-       run: docker-compose build
+       run: |
+            ls -a
+            docker-compose build
    
