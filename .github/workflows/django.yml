@@ -29,10 +29,11 @@ jobs:
      needs: buildpython
      runs-on: ubuntu-latest
      steps:
+     - uses: actions/checkout@v3
      - name: Build Django Project
        run: |
             pwd
-            cd ..
+            ls -a
             pwd
             docker-compose build
    
