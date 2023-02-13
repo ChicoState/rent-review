@@ -28,7 +28,6 @@ jobs:
   builddjango:
      runs-on: ubuntu-latest
      steps:
-     - uses: action/checkout@v3
      - name: Build Django Project
        run: docker-compose build
    
