@@ -31,6 +31,6 @@ jobs:
      steps:
      - name: Build Django Project
        run: |
-            ls -a
+            pwd
             docker-compose build
    
