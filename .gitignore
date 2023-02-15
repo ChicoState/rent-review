@@ -246,3 +246,6 @@ nginx/ssl
 # ignore cloud key
 cins465-cloudkey.json
 client_secret_oauth2.json
+
+#data base
+data/
