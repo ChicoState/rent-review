@@ -1,0 +1,28 @@
+<<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    {% include "bootstrap.html" %}
+    <script src="{% static 'home.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'home.css' %}"/>
+    <title>RentReview</title>
+  </head>
+  <body>
+    <div>
+    <div class="input-group">
+      <div id="search-autocomplete" class="form-outline">
+        <input type="search" id="form1" class="form-control" />
+        <label class="form-label" for="form1">Search</label>
+      </div>
+      <button type="button" class="btn btn-primary">
+        <i class="fas fa-search">
+          <div>
+          <img src="{% static 'search-glass-black.svg' %}">
+          </div>
+        </i>
+      </button>
+    </div>
+    </div>
+  </body>
+</html>
