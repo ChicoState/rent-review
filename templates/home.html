@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -7,22 +7,43 @@
     <script src="{% static 'home.js' %}"></script>
     <link rel="stylesheet" href="{% static 'home.css' %}"/>
     <title>RentReview</title>
+
+    <style>
+          #center {
+            top: 50%;
+            left: 50%;
+            width: calc(100%/3);
+            transform: translate(-50%, -50%);
+            position: fixed;
+            #background-color: lightblue;
+            white-space: nowrap;
+          }
+          #searchBar{
+            width: 80%
+          }
+          #buttonC {
+            background-color: lightblue;
+            width: 20%
+          }
+        </style>
   </head>
   <body>
-    <div>
-    <div class="input-group">
-      <div id="search-autocomplete" class="form-outline">
-        <input type="search" id="form1" class="form-control" />
-        <label class="form-label" for="form1">Search</label>
-      </div>
-      <button type="button" class="btn btn-primary">
-        <i class="fas fa-search">
-          <div>
-          <img src="{% static 'search-glass-black.svg' %}">
-          </div>
-        </i>
-      </button>
-    </div>
-    </div>
+
+    <div id="center">
+    <input type="text" id="searchBar" placeholder="City Name">
+    <script>
+        $(function () {
+            var availableCities = [
+                {% for city in cities %}
+            "{{city}}",
+            {% endfor %}
+    ];
+        $("#searchBar").autocomplete({
+            source: availableCities
+        });
+  } );
+    </script>
+    <button id="buttonC" type="button" class="btn">Search</button>
+  </div>
   </body>
 </html>
