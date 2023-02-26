@@ -1,4 +1,4 @@
-.center {
+centerDiv{
   top: 50%;
   left: 50%;
   width: calc(100%/3);
@@ -7,10 +7,10 @@
   background-color: lightblue;
   white-space: nowrap;
 }
-.searchBar{
+searchBar{
   width: 80%
 }
-.buttonC {
+buttonC {
   background-color: lightblue;
   width: 20%
 }
