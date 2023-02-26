@@ -21,5 +21,5 @@ from website import views as website_view
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('',website_view.home),
-    path('/<city_name>/', website_view.cityLookup,  name='city_lookup')
+    path('<city_name>/', website_view.cityLookup,  name='city_lookup')
 ]
