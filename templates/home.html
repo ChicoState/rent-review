@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    {% include "bootstrap.html" %}
+    <script src="{% static 'home.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'home.css' %}" />
+    <title>RentReview</title>
+
+    <style>
+          #center {
+            top: 50%;
+            left: 50%;
+            margin: auto;
+            width: calc(100%/3);
+            transform: translate(-50%, -50%);
+            position: fixed;
+            #background-color: lightblue;
+            white-space: nowrap;
+          }
+          #searchBar{
+            width: 80%
+          }
+          #buttonC {
+            background-color: lightblue;
+            #width: 20%
+            size: 50
+          }
+        </style>
+  </head>
+  <body>
+
+    <div id="center">
+      <form method="post" style="display: inline;" >
+        {% csrf_token %}
+        {{form}}
+    <script>
+        $(function () {
+            var availableCities = [
+                {% for city in cities %}
+            "{{city}}",
+            {% endfor %}
+    ];
+        $("#searchBar").autocomplete({
+            source: availableCities
+        });
+  } );
+    </script>
+    <button id="buttonC" type="submit"  class="btn" >Search</button>
+    </form>
+  </div>
+  </body>
+</html>

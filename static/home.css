@@ -1,0 +1,16 @@
+centerDiv{
+  top: 50%;
+  left: 50%;
+  width: calc(100%/3);
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: lightblue;
+  white-space: nowrap;
+}
+searchBar{
+  width: 80%
+}
+buttonC {
+  background-color: lightblue;
+  width: 20%
+}
