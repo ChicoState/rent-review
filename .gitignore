@@ -55,6 +55,7 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
+migrations/
 
 # Flask stuff:
 instance/
@@ -82,6 +83,7 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
+.vscode
 .env
 .venv
 env/
