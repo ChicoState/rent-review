@@ -5,34 +5,20 @@
     {% load static %}
     {% include "bootstrap.html" %}
     <script src="{% static 'home.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'home.css' %}" />
+    <link type="text/css" rel="stylesheet" href="{% static 'home.css' %}" />
     <title>RentReview</title>
-
-    <style>
-          #center {
-            top: 50%;
-            left: 50%;
-            margin: auto;
-            width: calc(100%/3);
-            transform: translate(-50%, -50%);
-            position: fixed;
-            #background-color: lightblue;
-            white-space: nowrap;
-          }
-          #searchBar{
-            width: 80%
-          }
-          #buttonC {
-            background-color: lightblue;
-            #width: 20%
-            size: 50
-          }
-        </style>
   </head>
   <body>
+    <!-- {% include "navigation.html" %} -->
+    <div class="grid-container">
+      <div class="top-row">
+        <div id="company-name">Rent Review</div>
+      </div>
 
-    <div id="center">
-      <form method="post" style="display: inline;" >
+    <div class="center-padding"></div>  
+    <div id="center-center" >
+      <form id="cityForm" method="post" >
+        <div id="formDiv">
         {% csrf_token %}
         {{form}}
     <script>
@@ -41,14 +27,28 @@
                 {% for city in cities %}
             "{{city}}",
             {% endfor %}
-    ];
+            ];
         $("#searchBar").autocomplete({
             source: availableCities
         });
-  } );
+        });
+        document.getElementById('searchBar').addEventListener('keypress', function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            document.getElementById('cityForm').submit();
+        }
+    });
     </script>
-    <button id="buttonC" type="submit"  class="btn" >Search</button>
-    </form>
+
+    <!-- <button id="buttonC" type="submit"  class="btn" >Search</button> -->
+    </div>
+   </form>
   </div>
+  <div class="center-padding"></div>
+  <div class="bottom-row"></div>
+
+
+
+</div>
   </body>
 </html>

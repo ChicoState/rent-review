@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_DIR = os.path.join(BASE_DIR,"templates")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
@@ -81,8 +81,8 @@ DATABASES = {
     #     'NAME': 'rentreviewdb',
     #     'USER': 'web',
     #     'PASSWORD': 'webpass',
-    #     'HOST': 'db',
-    #     'PORT': '',
+    #     'HOST': '127.0.0.1',
+    #     'PORT': '5432',
     # }
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -125,7 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [ STATIC_DIR ]
 
 # Default primary key field type

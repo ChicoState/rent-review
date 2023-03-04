@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 
 from website import views as website_view
 
@@ -23,3 +25,5 @@ urlpatterns = [
     path('',website_view.home),
     path('<city_name>/', website_view.cityLookup,  name='city_lookup')
 ]
+
+urlpatterns += staticfiles_urlpatterns()
