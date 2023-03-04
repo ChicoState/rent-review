@@ -4,29 +4,25 @@
   {{ city.name }} Complexes
 {% endblock title %}
 {% block content %}
-  <style>
-    background: blue;
-  </style>
   <div id="center">
     <form method="post" style="display: inline;">
       {% csrf_token %}
       {{ form }}
-      <script>
-        $(function() {
-            var availableCities = [{
-                    %
-                    for city in cities %
-                }
-                "{{city}}", {
-                    %
-                    endfor %
-                }
-            ];
-            $("#searchBar").autocomplete({
-                source: availableCities
-            });
-        });
-      </script>
+      {% block scripts %}
+        <script>
+          {% comment %}! If autofill stops working, Check formatting especially for django tags   {% endcomment %}
+          $(function() {
+              var availableCities = [
+              {% for city in cities %}
+                  "{{ city }}", 
+                  {% endfor %}
+              ];
+              $("#searchBar").autocomplete({
+                  source: availableCities
+              });
+          });
+        </script>
+      {% endblock scripts %}
       <button id="buttonC" type="submit"  class="btn">Search</button>
     </form>
   </div>
