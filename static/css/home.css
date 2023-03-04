@@ -1,16 +1,81 @@
-centerDiv{
-  top: 50%;
-  left: 50%;
-  width: calc(100%/3);
-  transform: translate(-50%, -50%);
-  position: fixed;
-  background-color: rgb(16, 162, 211);
+div {
+  display: inline;
+}
+form {
+  vertical-align: top;
+}
+
+#searchBar {
+  /* width: 100%; */
+  resize: none;
+  border-radius: 0.8rem;
+  text-indent: 5px;
+
+  outline:0px;
+}
+
+#cityForm {
+  margin: 0  auto;
+  vertical-align: top;
+}
+
+#formDiv{
+  vertical-align: top;
   white-space: nowrap;
+  margin: 0 auto;
+
 }
-searchBar{
-  width: 80%
+
+#company-name {
 }
-buttonC {
-  background-color: lightblue;
-  width: 20%
+
+
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  width: 100vw;
+  height: 100vh;
+
+}
+.top-row {
+  display: flex;
+  grid-column: span 3;
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  text-align: center;
+  bottom: 0;
+  font-size: 50px;
+  position: relative;
+  align-items: flex-end;
+  justify-content: center;
+
+}
+
+.center-padding {
+  background-color: #5daaf3;
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  /* linear-gradient(180deg, #5daaf3 0%, #3F5EFB 100%) */
+  /* green-blueish #7ae9da */
+}
+
+#center-center {
+  display: flex;
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  margin: auto;
+  background-color: #5daaf3;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+#bottom-row {
+  grid-column: span 3;
+  background-color: #5daaf3;
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+}
+
+.ui-state-hover {
+  background-color: #5daaf3;
 }
