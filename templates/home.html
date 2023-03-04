@@ -4,26 +4,41 @@
   {{ city.name }} Complexes
 {% endblock title %}
 {% block content %}
-  <div id="center">
-    <form method="post" style="display: inline;">
-      {% csrf_token %}
-      {{ form }}
-      {% block scripts %}
-        <script>
-          {% comment %}! If autofill stops working, Check formatting especially for django tags   {% endcomment %}
-          $(function() {
-              var availableCities = [
-              {% for city in cities %}
-                  "{{ city }}", 
-                  {% endfor %}
-              ];
-              $("#searchBar").autocomplete({
-                  source: availableCities
-              });
-          });
-        </script>
-      {% endblock scripts %}
-      <button id="buttonC" type="submit"  class="btn">Search</button>
-    </form>
+<div class="grid-container">
+  <div class="top-row">
+    <div id="company-name">Rent Review</div>
   </div>
+
+<div class="center-padding"></div>  
+<div id="center-center" >
+  <form id="cityForm" method="post" >
+    <div id="formDiv">
+    {% csrf_token %}
+    {{form}}
+<script>
+    $(function () {
+        var availableCities = [
+            {% for city in cities %}
+        "{{city}}",
+        {% endfor %}
+        ];
+    $("#searchBar").autocomplete({
+        source: availableCities
+    });
+    });
+    document.getElementById('searchBar').addEventListener('keypress', function(event) {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+        document.getElementById('cityForm').submit();
+    }
+});
+</script>
+
+<!-- <button id="buttonC" type="submit"  class="btn" >Search</button> -->
+</div>
+</form>
+</div>
+<div class="center-padding"></div>
+<div class="bottom-row"></div>
+</div>
 {% endblock content %}
