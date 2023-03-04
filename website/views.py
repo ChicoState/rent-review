@@ -19,13 +19,11 @@ def home(request):
             print("not valid")
     cities = list(set(Cities.objects.values_list("name", flat=True)))
     form = CityForm()
-    print(cities)
     return render(request, "home.html", {"cities": cities, "form": form})
 
 
 def cityLookup(request, city_name):
     # redirect complete
-    print(city_name)
     # If city name is empty
     if city_name == "":
         return redirect('home')
