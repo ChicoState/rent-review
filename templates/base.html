@@ -73,11 +73,12 @@
     </label>
     <div id="sidebarMenu">
       <ul class="sidebarMenuInner">
-        <!-- TODO: Update page urls -->
+        {% comment %} List of items inside hammenu {% endcomment %}
         <li>
           <a href={% url 'home' %}>Home</a>
         </li>
         <li>
+          {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
           <a href="/admin">Admin Login</a>
         </li>
       </ul>
