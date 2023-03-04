@@ -3,10 +3,10 @@
 {% block title %}
   {{ city.name }} Complexes
 {% endblock title %}
-{% block head %}
-  <link rel="stylesheet" href="{% static 'home.css' %}" />
-{% endblock head %}
 {% block content %}
+  <style>
+    background: blue;
+  </style>
   <div id="center">
     <form method="post" style="display: inline;">
       {% csrf_token %}

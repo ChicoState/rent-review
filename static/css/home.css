@@ -4,7 +4,7 @@ centerDiv{
   width: calc(100%/3);
   transform: translate(-50%, -50%);
   position: fixed;
-  background-color: lightblue;
+  background-color: rgb(16, 162, 211);
   white-space: nowrap;
 }
 searchBar{

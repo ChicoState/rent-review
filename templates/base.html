@@ -1,8 +1,8 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    {% load static %}
     {% comment %} Bootstrap.html contents {% endcomment %}
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -25,7 +25,8 @@
     {% comment %} Bootstrap.html contents {% endcomment %}
     {% comment %} Responsive viewport {% endcomment %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{% static 'home.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/hammenu.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <title>
       {% block title %}
       {% endblock title %}
@@ -63,6 +64,24 @@
     </style>
   </head>
   <body>
+    <div class="header"></div>
+    <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+    <label for="openSidebarMenu" class="sidebarIconToggle">
+      <div class="spinner diagonal part-1"></div>
+      <div class="spinner horizontal"></div>
+      <div class="spinner diagonal part-2"></div>
+    </label>
+    <div id="sidebarMenu">
+      <ul class="sidebarMenuInner">
+        <!-- TODO: Update page urls -->
+        <li>
+          <a href={% url 'home' %}>Home</a>
+        </li>
+        <li>
+          <a href="/admin">Admin Login</a>
+        </li>
+      </ul>
+    </div>
     {% block content %}
     {% endblock content %}
     {% block scripts %}
