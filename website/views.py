@@ -38,13 +38,14 @@ def cityLookup(request, city_name):
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")
-    Cities(name="Chico", complex_name="Village At the Timbers").save()
-    Cities(name="Chico", complex_name="Timbers IV").save()
-    Cities(name="Sunnyvale", complex_name="Arioso Apt").save()
-    Cities(name="Sunnyvale", complex_name="Santa Clara Apt").save()
-    Cities(name="SanFrancisco", complex_name="Com 1").save()
-    Cities(name="SanFrancisco", complex_name="Com 2").save()
-    Cities(name="SanFrancisco", complex_name="Com 3").save()
-    Cities(name="SanJose", complex_name="SJ Com 3").save()
-    Cities(name="Mountain View", complex_name="MV Com 3").save()
-    Cities(name="Palo Alto", complex_name="PA Com 3").save()
+    from csv import DictReader
+    #! If error on open check to see if path is correct.
+    for row in DictReader(open("static/misc/TempDatabaseEntries.csv")):
+        DBentry = Cities(
+            name=row["City"],
+            complex_name=row["complex_name"],
+            address=row["address"],
+            url=row["url"],
+            zipcode=row["zipcode"],
+        )
+        DBentry.save()
