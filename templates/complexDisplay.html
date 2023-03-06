@@ -1,15 +1,32 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-  {{ city.name }} Complexes
+  {{ cities.0.name }} Complexes
 {% endblock title %}
 {% block content %}
-  <div id="center">
-    <h1>This is the Complex's Page</h1>
-    {% for city in cities %}
-      <p>
-        <a href={{ city.url }}>{{ city.complex_name }}, {{ city.address }}, {{ city.name }}, {{ city.zipcode }}</a>
-      </p>
-    {% endfor %}
+  <div class="container">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-6" style=>
+        <div id="center">
+          <h1 style="text-align:center">Complexes in {{ cities.0.name }}</h1>
+          {% for city in cities %}
+            <div class="row"
+                 style="background-color:#5daaf3;
+                        border-radius: 0.8rem;
+                        padding:5px;
+                        margin:10px;
+                        text-indent: 5px">
+              <div class="col" style="vertical-align:middle; padding-top:2%">
+                <p>
+                  <a style="color:white;" href={{ city.url }}>{{ city.complex_name }}, {{ city.address }}, {{ city.name }}, {{ city.zipcode }}</a>
+                </p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col", style="color:blue;"></div>
+    </div>
   </div>
 {% endblock content %}
