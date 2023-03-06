@@ -4,10 +4,17 @@
   {{ cities.0.name }} Complexes
 {% endblock title %}
 {% block content %}
+  <style>
+    #center {
+        position: releative;
+        #background-color: lightblue;
+    }
+  </style>
   <div class="container">
+    <div class="row"></div>
     <div class="row">
       <div class="col"></div>
-      <div class="col-6" style=>
+      <div class="col-6 mx-a" style="margin-top:60px;">
         <div id="center">
           <h1 style="text-align:center">Complexes in {{ cities.0.name }}</h1>
           {% for city in cities %}
