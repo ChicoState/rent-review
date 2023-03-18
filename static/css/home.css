@@ -1,4 +1,6 @@
-
+div {
+  display: inline;
+}
 form {
   vertical-align: top;
 }
@@ -24,6 +26,8 @@ form {
 
 }
 
+#company-name {
+}
 
 
 
