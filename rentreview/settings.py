@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR = os.path.join(BASE_DIR,"templates")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 # Quick-start development settings - unsuitable for production
@@ -76,18 +79,18 @@ WSGI_APPLICATION = "rentreview.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'rentreviewdb',
-    #     'USER': 'web',
-    #     'PASSWORD': 'webpass',
-    #     'HOST': 'db',
-    #     'PORT': '',
-    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': str(os.getenv('DBNAME')),
+        'USER': str(os.getenv('DBUSER')),
+        'PASSWORD': str(os.getenv('DBPASSWORD')),
+        'HOST': str(os.getenv('DBHOST')),
+        'PORT': str(os.getenv('DBPORT')),
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
 
@@ -126,7 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [ STATIC_DIR ]
+STATICFILES_DIRS = [STATIC_DIR]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
