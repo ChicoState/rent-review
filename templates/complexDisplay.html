@@ -1,15 +1,56 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-  {{ city.name }} Complexes
+  {{ cities.0.name }} Complexes
 {% endblock title %}
+{% block head %}
+  <style>
+    #CitiesContent {
+        padding-top: 2%;
+        margin: 1%;
+        background-color: #5daaf3;
+    }
+
+    #rowgutter {
+        margin-right: 0px;
+    }
+
+    #fixed {
+        position: fixed;
+        top: 25px;
+        width: 100%;
+        z-index:1;
+        background-color: white;
+    }
+  </style>
+{% endblock head %}
 {% block content %}
-  <div id="center">
-    <h1>This is the Complex's Page</h1>
-    {% for city in cities %}
-      <p>
-        <a href={{ city.url }}>{{ city.complex_name }}, {{ city.address }}, {{ city.name }}, {{ city.zipcode }}</a>
-      </p>
-    {% endfor %}
+  <div id="fixed">
+    <div class="container">
+      <div class="row justify-content-center"
+           id="rowgutter"
+           style="margin-top:50px">
+        <h1 style="text-align:center">Complexes in {{ cities.0.name }}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center"
+         style="margin-top:150px"
+         id="rowgutter">
+      <div class="col-6 justify-content-center d-inline-block overflow-scroll">
+        {% for city in cities %}
+          <div class="row">
+            <div class="col border text-center rounded-2"
+                 id="CitiesContent"
+                 style="border-radius:50px">
+              <a href={{ city.url }} style="color:black">
+                <p>{{ city.complex_name }}, {{ city.address }}, {{ city.zipcode }}</p>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 {% endblock content %}

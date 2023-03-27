@@ -33,39 +33,27 @@
     </title>
     {% block head %}
     {% endblock head %}
-    <style>
-      #center {
-          top: 50%;
-          left: 50%;
-          margin: auto;
-          width: calc(100%/3);
-          transform: translate(-50%, -50%);
-          position: fixed;
-          #background-color: lightblue;
-          white-space: nowrap;
-      }
-          
-    </style>
   </head>
   <body>
-    <div class="header"></div>
-    <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
-    <label for="openSidebarMenu" class="sidebarIconToggle">
-      <div class="spinner diagonal part-1"></div>
-      <div class="spinner horizontal"></div>
-      <div class="spinner diagonal part-2"></div>
-    </label>
-    <div id="sidebarMenu">
-      <ul class="sidebarMenuInner">
-        {% comment %} List of items inside hammenu {% endcomment %}
-        <li>
-          <a href={% url 'home' %}>Home</a>
-        </li>
-        <li>
-          {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
-          <a href="/admin">Admin Login</a>
-        </li>
-      </ul>
+    <div class="header">
+      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+      <label for="openSidebarMenu" class="sidebarIconToggle">
+        <div class="spinner diagonal part-1"></div>
+        <div class="spinner horizontal"></div>
+        <div class="spinner diagonal part-2"></div>
+      </label>
+      <div id="sidebarMenu">
+        <ul class="sidebarMenuInner">
+          {% comment %} List of items inside hammenu {% endcomment %}
+          <li>
+            <a href={% url 'home' %}>Home</a>
+          </li>
+          <li>
+            {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
+            <a href="/admin">Admin Login</a>
+          </li>
+        </ul>
+      </div>
     </div>
     {% block content %}
     {% endblock content %}
