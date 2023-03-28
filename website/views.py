@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Cities
+from .models import Cities, Posts, Comments
 from .forms import CityForm
 # Create your views here.
 
@@ -11,7 +11,7 @@ def home(request):
         form = CityForm(request.POST)
         if form.is_valid():
             city_input = form.cleaned_data.get("city_input")
-            if Cities.objects.filter(name=city_input).exists():
+            if Cities.objects.filter(name__icontains=city_input).exists():
                 return redirect('city_lookup', city_name=city_input)
             else:
                 print("city does not excists")
@@ -28,12 +28,40 @@ def cityLookup(request, city_name):
     if city_name == "":
         return redirect('home')
     else:
-        cities = list(Cities.objects.filter(
-            name=city_name).order_by("complex_name"))
+        cities = list(Cities.objects.filter(name__icontains=city_name).order_by("complex_name"))
     context = {"cities": cities}
     for i in range(len(cities)):
         print(cities[i].name, cities[i].complex_name)
     return render(request, "complexDisplay.html", context=context)
+
+
+
+
+def complexLookup(request, city_name, complexe_id):
+    if city_name == "" or not complexe_id:
+        return redirect('home')
+    context = 
+    city = Cities.objects.filter(id=complexe_id)
+    post_list = list(Posts.objects.filter(complexe__pk=complexe_id).only("user", "post_title", "likes"))
+    complexe_data = {}
+    complexe_data["likes_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("likes"))["likes__avg"] or 0
+    complexe_data["strictness_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("strictness"))["strictness__avg"] or 0
+    complexe_data["amennities_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("amennities"))["amennities__avg"] or 0
+    complexe_data["accessibility_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("accessibility"))["accessibility__avg"] or 0
+    complexe_data["maintenence_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("maintenence"))["maintenence__avg"] or 0
+    complexe_data["grace_period_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("grace_period"))["grace_period__avg"] or 0
+    complexe_data["staff_friendlyness_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("staff_friendlyness"))["staff_friendlyness__avg"] or 0
+    complexe_data["price_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("price"))["price__avg"] or 0
+
+    context = {"city": city, "complexe_data": complexe_data, "display_list" : post_list}
+    return  render(request, "postDisplay.html", context)
+
+def postLookup(request, city_name, complexe_id, post_id):
+    
+    return redirect('home')
+
+
+
 
 
 def init_testSet():

@@ -21,5 +21,8 @@ from website import views as website_view
 urlpatterns = [
     path("admin/", admin.site.urls, name="adminPage"),
     path('', website_view.home, name="home"),
-    path('<city_name>/', website_view.cityLookup,  name='city_lookup')
+    path('<city_name>/', website_view.cityLookup,  name='city_lookup'),
+    path('<city_name>/<complexe_id>/', website_view.complexLookup,  name='complexLookup'),
+    path('<city_name>/<complexe_id>/<post_id>', website_view.postLookup,  name='postLookup'),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
