@@ -22,6 +22,7 @@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
           rel="stylesheet"
           type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% comment %} Bootstrap.html contents {% endcomment %}
     {% comment %} Responsive viewport {% endcomment %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,9 +49,18 @@
           <li>
             <a href={% url 'home' %}>Home</a>
           </li>
+          {% if user.is_authenticated %}
+          <li>
+            <a href={% url 'logout' %}>Logout ({{user.username}})</a>
+          </li>
+          {% else %}
+          <li>
+            <a href={% url 'login' %}>Login</a>
+          </li>
+          {% endif %}
           <li>
             {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
-            <a href="/admin">Admin Login</a>
+            <a href="/admin">Admins</a>
           </li>
         </ul>
       </div>

@@ -22,7 +22,10 @@ urlpatterns = [
     path("admin/", admin.site.urls, name="adminPage"),
     path('', website_view.home, name="home"),
     path('<city_name>/', website_view.cityLookup,  name='city_lookup'),
-    path('<city_name>/<complexe_id>/', website_view.complexLookup,  name='complexLookup'),
-    path('<city_name>/<complexe_id>/<post_id>', website_view.postLookup,  name='postLookup'),
+    path('<city_name>/<complex_id>/', website_view.complexLookup,  name='complexLookup'),
+    path('<city_name>/<complex_id>/<post_id>', website_view.postLookup,  name='postLookup'),
+    path('join/', website_view.join, name='join'),
+    path('login/', website_view.user_login, name='login'),
+    path('logout/', website_view.user_logout, name='logout'),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]

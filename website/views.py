@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Cities, Posts, Comments
-from .forms import CityForm
+from .models import Cities, Posts, Comments, User
+from django.db.models import Avg
+from .forms import CityForm, LoginForm, JoinForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
 # Create your views here.
 
 
@@ -37,28 +41,40 @@ def cityLookup(request, city_name):
 
 
 
-def complexLookup(request, city_name, complexe_id):
-    if city_name == "" or not complexe_id:
+def complexLookup(request, city_name, complex_id):
+    if city_name == "" or not complex_id:
         return redirect('home')
-    context = 
-    city = Cities.objects.filter(id=complexe_id)
-    post_list = list(Posts.objects.filter(complexe__pk=complexe_id).only("user", "post_title", "likes"))
-    complexe_data = {}
-    complexe_data["likes_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("likes"))["likes__avg"] or 0
-    complexe_data["strictness_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("strictness"))["strictness__avg"] or 0
-    complexe_data["amennities_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("amennities"))["amennities__avg"] or 0
-    complexe_data["accessibility_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("accessibility"))["accessibility__avg"] or 0
-    complexe_data["maintenence_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("maintenence"))["maintenence__avg"] or 0
-    complexe_data["grace_period_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("grace_period"))["grace_period__avg"] or 0
-    complexe_data["staff_friendlyness_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("staff_friendlyness"))["staff_friendlyness__avg"] or 0
-    complexe_data["price_avg"] = Posts.objects.filter(complexe__pk=complexe_id).aggregate(Avg("price"))["price__avg"] or 0
+    
+    city = list(Cities.objects.filter(pk=complex_id))
+    print(city)
+    post_list = list(Posts.objects.filter(complex__pk=complex_id).only("user", "post_title", "likes"))
+    complex_data = {}
+    complex_data["Likes"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("likes"))["likes__avg"] or 0
+    complex_data["Strictness"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("strictness"))["strictness__avg"] or 0
+    complex_data["Amennities"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("amennities"))["amennities__avg"] or 0
+    complex_data["Accessibility"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("accessibility"))["accessibility__avg"] or 0
+    complex_data["Maintenence"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("maintenence"))["maintenence__avg"] or 0
+    complex_data["Grace Period"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("grace_period"))["grace_period__avg"] or 0
+    complex_data["Staff Friendlyness"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("staff_friendlyness"))["staff_friendlyness__avg"] or 0
+    complex_data["Price"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("price"))["price__avg"] or 0
 
-    context = {"city": city, "complexe_data": complexe_data, "display_list" : post_list}
+    for key,value in complex_data.items():
+        print(key)
+        print(value)
+
+    context = {"city": city[0], "complex_data": complex_data, "post_list" : post_list}
     return  render(request, "postDisplay.html", context)
 
-def postLookup(request, city_name, complexe_id, post_id):
+def postLookup(request, city_name, complex_id, post_id):
+    if city_name == "" or not complex_id or not post_id:
+        return redirect('home')
     
-    return redirect('home')
+    city = Cities.objects.filter(id=complex_id)
+    post_data = Posts.objects.filter(id=post_id)
+    comment_list = list(Comments.objects.filter(post__pk = post_id))
+
+    context = {"city": city, "post_data": post_data, "comment_list" : comment_list}
+    return  render(request, "commentDisplay.html", context)
 
 
 
@@ -77,3 +93,49 @@ def init_testSet():
             zipcode=row["zipcode"],
         )
         DBentry.save()
+    
+    #Posts(user=User.objects.filter(username="admin"),complex=Cities.objects.filter(name__icontains="chico"), post_title="testing",post_text="test test test", likes=2, strictness=3,amennities=1,accessibility=0,maintenence=5,grace_period=4,staff_friendlyness=0,price=5).save()
+
+
+
+def join(request):
+    if (request.method == "POST"):
+        join_form = JoinForm(request.POST)
+        if (join_form.is_valid()):
+            user = join_form.save()
+            user.set_password(user.password)
+            user.save()
+            return redirect("home")
+        else:
+            page_data = { "join_form": join_form }
+            return render(request, 'join.html', page_data)
+    else:
+        join_form = JoinForm()
+        page_data = { "join_form": join_form }
+        return render(request, 'join.html', page_data)
+
+def user_login(request):
+    print("in login function")
+    if (request.method == 'POST'):
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data["username"]
+            password = login_form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    login(request,user)
+                    return redirect("home")
+                else:
+                    return HttpResponse("Your account is not active.")
+            else:
+                print("Someone tried to login and failed.")
+                print("They used username: {} and password: {}".format(username,password))
+                return render(request, 'login.html', {"login_form": LoginForm})
+    else:
+        return render(request, 'login.html', {"login_form": LoginForm})
+
+@login_required(login_url='/login/')
+def user_logout(request):
+    logout(request)
+    return redirect("home")
