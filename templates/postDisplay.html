@@ -79,14 +79,14 @@
           <div class="col-6" style="padding-right: 0%;">
             <h1> Reviews: {{ comment_list|length }}</h1>
         </div>
-        <div class="col-4">
+        <div class="col-4 ">
             {% if user.is_authenticated %}
             <a href="addPost">            
-              <button id="addPostButton" class="btn" >Add Review</button>
+              <button id="addPostButton" class="btn small mb-0" >Add Review</button>
             </a>
             {% else %}
             <a href={% url 'login' %}>
-              <button id="addPostButton" class="btn" >Login to add Review</button>
+              <button id="addPostButton" class="btn small mb-0" >Login to add Review</button>
           </a>
             {% endif %}
         </div>

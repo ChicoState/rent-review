@@ -82,6 +82,8 @@ def postLookup(request, city_name, complex_id, post_id):
 def add_post(request, city_name, complex_id):
     return redirect('home')
 
+def add_comment(request, city_name, complex_id, post_id):
+    return redirect('home')
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")

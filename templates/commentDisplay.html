@@ -89,10 +89,16 @@
                 <div class="col-8">
                     <h1> Comments: {{ comment_list|length }}</h1>
                 </div>
-                <div class="col-4">
-                    {% if user.is_authenticated %}
-                    <button id="addCommentButton" type="submit"  class="btn" >add Comment</button>
-                    {% endif %}
+                <div class="col-4 small mb-0">
+                  {% if user.is_authenticated %}
+                  <a href="addComment">            
+                    <button id="addCommentButton" class="btn" >Add Comment</button>
+                  </a>
+                  {% else %}
+                  <a href={% url 'login' %}>
+                    <button id="addCommentButton" class="btn" >Login to add Comment</button>
+                </a>
+                  {% endif %}
                 </div>
                 <!-- <div class="container my-5 py-5 text-dark">
                     <div class="row d-flex justify-content-center">
