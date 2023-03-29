@@ -85,7 +85,7 @@
               <button id="addPostButton" class="btn" >Add Review</button>
             </a>
             {% else %}
-            <a href="{% url 'login' %}"></a>
+            <a href={% url 'login' %}>
               <button id="addPostButton" class="btn" >Login to add Review</button>
           </a>
             {% endif %}
