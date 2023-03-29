@@ -79,7 +79,8 @@ def postLookup(request, city_name, complex_id, post_id):
     return  render(request, "commentDisplay.html", context)
 
 
-
+def add_post(request, city_name, complex_id):
+    return redirect('home')
 
 
 def init_testSet():
