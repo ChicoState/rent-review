@@ -73,7 +73,7 @@ def postLookup(request, city_name, complex_id, post_id):
     comment_list = list(Comments.objects.filter(post__pk = post_id).only("user","comment_text", "date_created"))
     complex_likes = list(Posts.objects.filter(pk=post_id).values("likes"))[0]
     user = list(Posts.objects.filter(pk=post_id).only("user"))[0]
-    post_description = list(Posts.objects.filter(pk=post_id).only("post_title", "post_text"))[0]
+    post_description = list(Posts.objects.filter(pk=post_id).only("post_title", "post_text", "date_created"))[0]
 
     context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data[0], "comment_list" : comment_list, "user": user, "post_description": post_description}
     return  render(request, "commentDisplay.html", context)
@@ -109,35 +109,36 @@ def join(request):
             user.save()
             return redirect("home")
         else:
-            page_data = { "join_form": join_form }
-            return render(request, 'join.html', page_data)
+            return render(request, "join.html", { "join_form": join_form })
     else:
-        join_form = JoinForm()
-        page_data = { "join_form": join_form }
-        return render(request, 'join.html', page_data)
+        return render(request, "join.html", { "join_form": JoinForm })
 
 def user_login(request):
     print("in login function")
     if (request.method == 'POST'):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
+            print("form is valid")
             username = login_form.cleaned_data["username"]
             password = login_form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user:
                 if user.is_active:
                     login(request,user)
-                    return redirect("home")
+                    print("user loggedin")
+                    return redirect(request.META.get('HTTP_REFERER'))
                 else:
+                    print("user not active")
                     return HttpResponse("Your account is not active.")
             else:
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(username,password))
-                return render(request, 'login.html', {"login_form": LoginForm})
+                return render(request,  "login.html", {"login_form": LoginForm})
     else:
-        return render(request, 'login.html', {"login_form": LoginForm})
+        print("initial render")
+        return render(request, "login.html", {"login_form": LoginForm})
 
-@login_required(login_url='/login/')
+@login_required(login_url='login/')
 def user_logout(request):
     logout(request)
     return redirect("home")

@@ -82,7 +82,9 @@
                     <h1> Comments: {{ comment_list|length }}</h1>
                 </div>
                 <div class="col-4">
+                    {% if user.is_authenticated %}
                     <button id="addCommentButton" type="submit"  class="btn" >add Comment</button>
+                    {% endif %}
                 </div>
                 <!-- <div class="container my-5 py-5 text-dark">
                     <div class="row d-flex justify-content-center">
@@ -132,6 +134,7 @@
                
             </div>
             <div class="row">
+                <div class="col-9" style="padding-left: 0%;padding-right: 0%;">
                 <ul>{% for comment in comment_list %}
                     <li class="comments" >
                         <a>{{ comment.user.username }}</a>
@@ -146,6 +149,7 @@
                     
                     {% endfor %}
                </ul>
+            </div>
             </div>
             
         </div>
