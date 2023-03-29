@@ -4,21 +4,32 @@
 Join Page
 {% endblock title %}
 {% block head %}
-
+<style>
+  #fixed {
+      position: fixed;
+      top: 70px;
+      width: 100%;
+      z-index:1;
+      background-color: white;
+  }
+</style>
 {% endblock head %}
 {% block content %}
+<div id="fixed">
 <div class="container">
-    <div class = "jumbotron">
       <h1>Join</h1>
       <form method="POST">{% csrf_token %}
         <table>
           {{ join_form.as_table }}
           <tr><td>
             <input type="submit" class="btn btn-primary" value = "Join"/>
-          </td></tr>
+          </td>
+          <td>Already have an account? Click <a href={% url 'login' %}>here</a> to login.</td>
+        </tr>
         </table>
       </form>
     </div>
   </div>
+</div>
 {% endblock content %}
 
