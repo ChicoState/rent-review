@@ -47,9 +47,8 @@ def complexLookup(request, city_name, complex_id):
     
     city = list(Cities.objects.filter(pk=complex_id))
     print(city)
-    post_list = list(Posts.objects.filter(complex__pk=complex_id).only("user", "post_title", "likes"))
+    post_list = list(Posts.objects.filter(complex__pk=complex_id).only("user", "post_title", "likes", "id"))
     complex_data = {}
-    complex_data["Likes"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("likes"))["likes__avg"] or 0
     complex_data["Strictness"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("strictness"))["strictness__avg"] or 0
     complex_data["Amennities"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("amennities"))["amennities__avg"] or 0
     complex_data["Accessibility"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("accessibility"))["accessibility__avg"] or 0
@@ -57,23 +56,26 @@ def complexLookup(request, city_name, complex_id):
     complex_data["Grace Period"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("grace_period"))["grace_period__avg"] or 0
     complex_data["Staff Friendlyness"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("staff_friendlyness"))["staff_friendlyness__avg"] or 0
     complex_data["Price"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("price"))["price__avg"] or 0
-
+    complex_likes = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("likes"))["likes__avg"] or 0
     for key,value in complex_data.items():
         print(key)
         print(value)
-
-    context = {"city": city[0], "complex_data": complex_data, "post_list" : post_list}
+    print(post_list)
+    context = {"city": city[0],"complex_likes":complex_likes, "complex_data": complex_data, "post_list" : post_list}
     return  render(request, "postDisplay.html", context)
 
 def postLookup(request, city_name, complex_id, post_id):
     if city_name == "" or not complex_id or not post_id:
         return redirect('home')
     
-    city = Cities.objects.filter(id=complex_id)
-    post_data = Posts.objects.filter(id=post_id)
-    comment_list = list(Comments.objects.filter(post__pk = post_id))
+    city = list(Cities.objects.filter(pk=complex_id))
+    post_data = list(Posts.objects.filter(pk=post_id).values("strictness","amennities","accessibility","maintenence","grace_period","staff_friendlyness"))
+    comment_list = list(Comments.objects.filter(post__pk = post_id).only("user","comment_text", "date_created"))
+    complex_likes = list(Posts.objects.filter(pk=post_id).values("likes"))[0]
+    user = list(Posts.objects.filter(pk=post_id).only("user"))[0]
+    post_description = list(Posts.objects.filter(pk=post_id).only("post_title", "post_text"))[0]
 
-    context = {"city": city, "post_data": post_data, "comment_list" : comment_list}
+    context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data[0], "comment_list" : comment_list, "user": user, "post_description": post_description}
     return  render(request, "commentDisplay.html", context)
 
 

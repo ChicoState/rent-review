@@ -28,6 +28,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/hammenu.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <script src="{% static 'js/hammburger.js' %}"></script>
     <title>
       {% block title %}
       {% endblock title %}
@@ -37,7 +38,7 @@
   </head>
   <body>
     <div class="header">
-      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu" onclick ="hideMenu()">
       <label for="openSidebarMenu" class="sidebarIconToggle">
         <div class="spinner diagonal part-1"></div>
         <div class="spinner horizontal"></div>

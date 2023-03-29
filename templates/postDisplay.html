@@ -26,6 +26,7 @@
             color: orange;
     }
   </style>
+  <link rel="stylesheet" href="{% static 'css/posts.css' %}"/>
 {% endblock head %}
 {% block content %}
 <div id="fixed">
@@ -38,29 +39,46 @@
       </div>
       <div class="row">
         <div class="col-6">
-            <h1>Average Ratings: </h1>
+            <div class="row">
+                <div class="col-8 justify-content-end" style="white-space: nowrap ;padding-right: 0px;">
+                    <h1 style="text-align: end; padding-right:3%">Average Rating:</h1>
+                </div>
+                <div class="col-4" style="display: inline-block;padding-top: 15px;padding-left: 0px;">
+                    <span class="fa fa-star {% if complex_likes >= 1 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes >= 2 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes >= 3 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes >= 4 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes == 5 %} checked {% endif %}"></span>
+                    <span>{{ complex_likes }}</span>
+                </div>
+            </div>
+            
+                 
+            
             <ul>{% for key, value in complex_data.items %}
-                <li style="list-style-type:none">{{ key }}
-                        <span class="fa fa-star {% if value > 0 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 1 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 2 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 3 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 4 %} checked {% endif %}"></span>
+                <li style="list-style-type:none; background-color: #efefef;">{{ key }}
+                        <span class="fa fa-star {% if value >= 1 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value >= 2 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value >= 3 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value >= 4 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value == 5 %} checked {% endif %}"></span>
                     {{ value }}
                 </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="col-6">
-            <h1> Reviews: </h1>
+            <h1> Reviews: {{ post_list|length }}</h1>
             <ul>{% for post in post_list %}
-                <li style="list-style-type:none">{{ key }}
-                        <span class="fa fa-star {% if value > 0 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 1 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 2 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 3 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value > 4 %} checked {% endif %}"></span>
-                    {{ value }}
+                <li class="reviews">
+                    <a href="{{ post.id }}" >{{ post.user.username }}
+                        <span class="fa fa-star {% if post.likes >= 1 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if post.likes >= 2 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if post.likes >= 3 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if post.likes >= 4 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if post.likes == 5 %} checked {% endif %}"></span>
+                    {{ post.likes }} - {{ post.post_title }}
+                    </a>
                 </li>
                 {% endfor %}
             </ul>
