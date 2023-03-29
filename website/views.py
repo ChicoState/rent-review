@@ -1,6 +1,17 @@
 from django.shortcuts import render, redirect
 from .models import Cities
 from .forms import CityForm
+#################################################################
+#Added forms/imports 
+#By AGGM
+#################################################################
+from website.forms import JoinForm
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from website.forms import JoinForm,LoginForm
+######################--END OF ADD--##############################
 # Create your views here.
 
 
@@ -49,3 +60,68 @@ def init_testSet():
             zipcode=row["zipcode"],
         )
         DBentry.save()
+
+
+
+###############################
+#Inserting forms for user to join
+#Using HeringsJoing form 
+###############################
+def join(request):
+    if(request.method == "POST"):
+        join_form = JoinForm(request.POST)
+        if(join_form.is_valid()):
+            #SAVE FROM DATA TO DB
+            user = join_form.save()
+            #ENCRPTS THE PASSWORD
+            user.set_passowrd(user.password)
+            #SAVES ENCRPTED PASSWORD PASSWORD TO DB
+            user.save()
+            #Succesfuly saves and redirects to home page
+            return redirect('home')
+        else:
+            #Form was filled incorrectly throwing an error
+            page_data = {"join_form":join_form}
+            return render(request,'templates/join.html',page_data)
+    else:
+        join_form=JoinForm()
+        page_data={"join_form":join_form}
+        return render(request, 'templates/join.html',page_data)
+#####################
+#Addinf the user login here, fallowing Herryings web notes
+#####################
+def user_login(request):
+    if(request.method == 'POST'):
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            #We first get usrName and pssWord
+            username =login_form.cleaned_data["username"]
+            passowrd = login_form.cleaned_data["password"]
+            #Djangos build-in Authentication Functions are being used 
+            user=authenticate(username=username,passowrd=passowrd)
+            #Checking if we have a user
+            if user:
+                #Checking the account activity
+                if user.is_active:
+                    #We log user in and redirect them
+                    login(request,user)
+                    #Send the User back to the home page
+                    return redirect('homes')
+                else:
+                    #There is no account with said input
+                    return HttpResponse("There is no existing account.")
+            else:
+                print("Someone tried to login and failed.")
+                print("The username used: {} and password: {}".format(username,passowrd))
+                return render(request, 'templates/login.html',{"login_form":LoginForm})
+        else:
+            #Nothing was give for user login
+            return render(request,'templates/login.html',{"login_form":LoginForm})
+##########################################
+# #END OF USER LOGIN FORM# #
+##########################################
+def user_logout(request):
+    def user_logout(request):
+        #LOGOUT the user
+        logout(request)
+        return redirect("")

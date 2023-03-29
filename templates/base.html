@@ -27,6 +27,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/hammenu.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    
     <title>
       {% block title %}
       {% endblock title %}
@@ -51,6 +52,18 @@
           <li>
             {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
             <a href="/admin">Admin Login</a>
+          </li>
+          {%if user.is_authenticated%}
+          <li  >
+            <a class="base-link" her="/logout">Logout</a>
+          </li>
+          {%else%}
+          <li> 
+            <a class="base-link" herf="/login">Login</a>
+          </li>
+          {%endif%}
+          <li>
+            <a  class="base-link" herf="/join">Join</a>
           </li>
         </ul>
       </div>

@@ -1,0 +1,23 @@
+<html>
+    <head>
+        {%include "tamplates/base.html"%}
+        {%load static%}
+    </head>
+    <body>
+        {%include "templates/base.html"%}
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Login</h1>
+                <from action="/login/" method="POST">{%csrf_token%}
+                    <table>             
+                        {{login_form.as_sidebar}}
+                        <tr><td>
+                            <input type="submit" class="btn btn-primary" value="Login"/>
+                        </td></tr>
+                    </table>
+                </from>
+            </div>
+        </div>   
+    </body>
+</html>
+<!---Add Loging AGGM-->
