@@ -129,7 +129,9 @@ def user_login(request):
                 if user.is_active:
                     login(request,user)
                     print("user loggedin")
-                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    print(request.META['HTTP_REFERER'])
+                    #return HttpResponseRedirect(request.META['HTTP_REFERER'])
+                    return redirect('home')
                 else:
                     print("user not active")
                     return HttpResponse("Your account is not active.")
