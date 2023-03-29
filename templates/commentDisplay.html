@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{ city.name }} Complexes
+{% endblock title %}
+{% block head %}
+  <style>
+    #CitiesContent {
+        padding-top: 2%;
+        margin: 1%;
+        background-color: #5daaf3;
+    }
+
+    #rowgutter {
+        margin-right: 0px;
+    }
+
+    #fixed {
+        position: fixed;
+        top: 25px;
+        width: 100%;
+        z-index:1;
+        background-color: white;
+    }
+    .checked {
+            color: orange;
+    }
+  </style>
+  <link rel="stylesheet" href="{% static 'css/comments.css' %}"/>
+{% endblock head %}
+{% block content %}
+<div id="fixed">
+    <div class="container">
+      <div class="row justify-content-center" id="rowgutter" style="margin-top:50px">
+        <h1 style="text-align:center">{{ city.complex_name }}</h1>
+      </div>
+      <div class="row justify-content-center" id="rowgutter">
+        <p>{{ city.address }}, {{ city.zipcode }}</p>
+      </div>
+
+      <div class="row description" >
+        <div class="col-8">
+            <h1 style="margin-bottom: auto;">{{ post_description.post_title }}</h1>
+            <p class="small mb-0" style="padding-left: 3%;">Created by {{ user.user.username }} on {{post_description.date_created}} </p>
+            <p> {{ post_description.post_text }}</p>
+        </div>
+        
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-6" style="white-space: nowrap ;padding-right: 0px;">
+                    <h1 style="text-align: end; padding-right:3%"> Rating:</h1>
+                </div>
+                <div class="col-4" style="display: inline-block;padding-top: 15px;padding-left: 0px;">
+                    <span class="fa fa-star {% if complex_likes.likes >= 1 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes.likes >= 2 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes.likes >= 3 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes.likes >= 4 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if complex_likes.likes == 5 %} checked {% endif %}"></span>
+                    <span>{{ complex_likes.likes }}</span>
+                </div>
+            </div>
+                 
+            
+            <ul>{% for key, value in post_data.items %}
+                <li style="list-style-type:none; background-color: #efefef;">{{ key }}
+                        <span class="fa fa-star {% if value >= 1 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value >= 2 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value >= 3 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value >= 4 %} checked {% endif %}"></span>
+                        <span class="fa fa-star {% if value == 5 %} checked {% endif %}"></span>
+                    {{ value }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-8">
+                    <h1> Comments: {{ comment_list|length }}</h1>
+                </div>
+                <div class="col-4">
+                    {% if user.is_authenticated %}
+                    <button id="addCommentButton" type="submit"  class="btn" >add Comment</button>
+                    {% endif %}
+                </div>
+                <!-- <div class="container my-5 py-5 text-dark">
+                    <div class="row d-flex justify-content-center">
+                      <div class="col-md-10 col-lg-8 col-xl-6">
+                        <div class="card">
+                          <div class="card-body p-4">
+                            <div class="d-flex flex-start w-100">
+                              <img class="rounded-circle shadow-1-strong me-3"
+                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                                height="65" />
+                              <div class="w-100">
+                                <h5>Add a comment</h5>
+                                <ul class="rating mb-3" data-mdb-toggle="rating">
+                                  <li>
+                                    <i class="far fa-star fa-sm text-danger" title="Bad"></i>
+                                  </li>
+                                  <li>
+                                    <i class="far fa-star fa-sm text-danger" title="Poor"></i>
+                                  </li>
+                                  <li>
+                                    <i class="far fa-star fa-sm text-danger" title="OK"></i>
+                                  </li>
+                                  <li>
+                                    <i class="far fa-star fa-sm text-danger" title="Good"></i>
+                                  </li>
+                                  <li>
+                                    <i class="far fa-star fa-sm text-danger" title="Excellent"></i>
+                                  </li>
+                                </ul>
+                                <div class="form-outline">
+                                  <textarea class="form-control" id="textAreaExample" rows="4"></textarea>
+                                  <label class="form-label" for="textAreaExample">What is your view?</label>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                  <button type="button" class="btn btn-success">Danger</button>
+                                  <button type="button" class="btn btn-danger">
+                                    Send <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+               
+            </div>
+            <div class="row">
+                <div class="col-9" style="padding-left: 0%;padding-right: 0%;">
+                <ul>{% for comment in comment_list %}
+                    <li class="comments" >
+                        <a>{{ comment.user.username }}</a>
+                        <a>{{ comment.date_created }} </a>
+                        <ul> 
+                            <li style="list-style-type: none;">
+                            {{ comment.comment_text }}
+                        </li>
+                        </ul>
+                    
+                    </li>
+                    
+                    {% endfor %}
+               </ul>
+            </div>
+            </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

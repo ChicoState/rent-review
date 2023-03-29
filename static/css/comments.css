@@ -1,0 +1,15 @@
+.comments {
+    display: list-item;
+    list-style-type: "- ";
+    background-color: #efefef;
+}
+
+.description {
+    padding-left: 10%;
+    background-color: #efefef;
+}
+
+#addCommentButton {
+    background-color: #5daaf3;
+    height: 100%;
+}
