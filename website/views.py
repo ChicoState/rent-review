@@ -79,8 +79,11 @@ def postLookup(request, city_name, complex_id, post_id):
     return  render(request, "commentDisplay.html", context)
 
 
+def add_post(request, city_name, complex_id):
+    return redirect('home')
 
-
+def add_comment(request, city_name, complex_id, post_id):
+    return redirect('home')
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")
@@ -126,7 +129,9 @@ def user_login(request):
                 if user.is_active:
                     login(request,user)
                     print("user loggedin")
-                    return redirect("home")
+                    print(request.META['HTTP_REFERER'])
+                    #return HttpResponseRedirect(request.META['HTTP_REFERER'])
+                    return redirect('home')
                 else:
                     print("user not active")
                     return HttpResponse("Your account is not active.")

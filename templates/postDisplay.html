@@ -54,21 +54,45 @@
             </div>
             
                  
-            
-            <ul>{% for key, value in complex_data.items %}
-                <li style="list-style-type:none; background-color: #efefef;">{{ key }}
-                        <span class="fa fa-star {% if value >= 1 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value >= 2 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value >= 3 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value >= 4 %} checked {% endif %}"></span>
-                        <span class="fa fa-star {% if value == 5 %} checked {% endif %}"></span>
-                    {{ value }}
-                </li>
-                {% endfor %}
-            </ul>
+            <table style="margin-left: auto;margin-right: auto;list-style-type:none; background-color: #efefef;">
+              <tbody>
+                {% for key, value in complex_data.items %}
+                <tr>
+                  <th style="">{{ key }}
+                  </th>
+                  <td>
+                          <span class="fa fa-star {% if value >= 1 %} checked {% endif %}"></span>
+                          <span class="fa fa-star {% if value >= 2 %} checked {% endif %}"></span>
+                          <span class="fa fa-star {% if value >= 3 %} checked {% endif %}"></span>
+                          <span class="fa fa-star {% if value >= 4 %} checked {% endif %}"></span>
+                          <span class="fa fa-star {% if value == 5 %} checked {% endif %}"></span>
+                      {{ value }}
+                    </td>
+                
+                </tr>
+            {% endfor %}
+          </tbody>
+          </table>
         </div>
         <div class="col-6">
-            <h1> Reviews: {{ post_list|length }}</h1>
+          <div class="row">
+          <div class="col-6" style="padding-right: 0%;">
+            <h1> Reviews: {{ comment_list|length }}</h1>
+        </div>
+        <div class="col-4 ">
+            {% if user.is_authenticated %}
+            <a href="addPost">            
+              <button id="addPostButton" class="btn small mb-0" >Add Review</button>
+            </a>
+            {% else %}
+            <a href={% url 'login' %}>
+              <button id="addPostButton" class="btn small mb-0" >Login to add Review</button>
+          </a>
+            {% endif %}
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-9" style="padding-left: 0%;padding-right: 0%;">
             <ul>{% for post in post_list %}
                 <li class="reviews">
                     <a href="{{ post.id }}" >{{ post.user.username }}
@@ -83,6 +107,8 @@
                 {% endfor %}
             </ul>
         </div>
+      </div>
+    </div>
       </div>
     </div>
   </div>
