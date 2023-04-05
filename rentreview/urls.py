@@ -30,4 +30,5 @@ urlpatterns = [
     path('/login/', website_view.user_login, name='login'),
     path('/logout/', website_view.user_logout, name='logout'),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
+    path("/createComplex/", website_view.createComplex, name="createComplex"),
 ]

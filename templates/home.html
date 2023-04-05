@@ -1,47 +1,49 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Complexes
+  Complexes
 {% endblock title %}
 {% block head %}
   <script src="{% static 'js/home.js' %}"></script>
 {% endblock head %}
 {% block content %}
-<div class="grid-container">
-  <div class="top-row">
-    <div id="company-name">Rent Review</div>
+  <div class="grid-container">
+    <div class="top-row">
+      <div id="company-name">Rent Review</div>
+    </div>
+    <div class="center-padding"></div>
+    <div id="center-center">
+      <form id="cityForm" method="post">
+        <div id="formDiv">
+          {% csrf_token %}
+          {{ form }}
+          <script>
+            $(function() {
+                var availableCities = [{
+                        %
+                        for city in cities %
+                    }
+                    "{{city}}", {
+                        % endfor %
+                    }
+                ];
+                $("#searchBar").autocomplete({
+                    source: availableCities
+                });
+            });
+            document.getElementById('searchBar').addEventListener('keypress', function(event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    document.getElementById('cityForm').submit();
+                }
+            });
+          </script>
+          <!-- <button  type="submit"  class="btn">Search</button> -->
+          <a href={% url 'createComplex' %} class="btn btn-info" role="button">Create a new Complex!</a>
+        </div>
+      </form>
+    </div>
+    <div class="center-padding"></div>
+    <div class="bottom-row"></div>
   </div>
-
-<div class="center-padding"></div>  
-<div id="center-center" >
-  <form id="cityForm" method="post" >
-    <div id="formDiv">
-    {% csrf_token %}
-    {{ form }}
-<script>
-    $(function () {
-        var availableCities = [
-            {% for city in cities %}
-        "{{city}}",
-        {% endfor %}
-        ];
-    $("#searchBar").autocomplete({
-        source: availableCities
-    });
-    });
-    document.getElementById('searchBar').addEventListener('keypress', function(event) {
-    if (event.keyCode == 13) {
-        event.preventDefault();
-        document.getElementById('cityForm').submit();
-    }
-});
-</script>
-
-<!-- <button id="buttonC" type="submit"  class="btn" >Search</button> -->
-</div>
-</form>
-</div>
-<div class="center-padding"></div>
-<div class="bottom-row"></div>
-</div>
 {% endblock content %}
