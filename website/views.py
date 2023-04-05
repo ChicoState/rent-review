@@ -73,6 +73,19 @@ def postLookup(request, city_name, complex_id, post_id):
     context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data[0], "comment_list" : comment_list, "user": user, "post_description": post_description}
     return  render(request, "commentDisplay.html", context)
 
+def add_post(request, city_name, complex_id):
+    form = RateForm()
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+    context = {
+        'form': form
+        }
+    return render(request, 'reviewDisplay.html', context=context) 
+
+def add_comment(request, city_name, complex_id, post_id):
+    return redirect('home')
+
 def init_testSet():
     print("SAVING INTO DATABASE\n")
     from csv import DictReader
@@ -115,7 +128,9 @@ def user_login(request):
                 if user.is_active:
                     login(request,user)
                     print("user loggedin")
-                    return redirect("home")
+                    print(request.META['HTTP_REFERER'])
+                    #return HttpResponseRedirect(request.META['HTTP_REFERER'])
+                    return redirect('home')
                 else:
                     print("user not active")
                     return HttpResponse("Your account is not active.")
@@ -131,13 +146,3 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("home")
-
-def rate_view(request):
-    form = RateForm()
-    if request.method == "POST":
-        if form.is_valid():
-            form.save()
-    context = {
-        'form': form
-        }
-    return render(request, 'reviewDisplay.html', context=context) 
