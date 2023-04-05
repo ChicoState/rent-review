@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
 from .models import Cities, Posts, Comments, User
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm
+from .forms import CityForm, LoginForm, JoinForm, RateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 # Create your views here.
-
 
 def home(request):
     if Cities.objects.all().count() == 0:
@@ -25,7 +24,6 @@ def home(request):
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
 
-
 def cityLookup(request, city_name):
     # redirect complete
     # If city name is empty
@@ -37,9 +35,6 @@ def cityLookup(request, city_name):
     for i in range(len(cities)):
         print(cities[i].name, cities[i].complex_name)
     return render(request, "complexDisplay.html", context=context)
-
-
-
 
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
@@ -78,10 +73,6 @@ def postLookup(request, city_name, complex_id, post_id):
     context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data[0], "comment_list" : comment_list, "user": user, "post_description": post_description}
     return  render(request, "commentDisplay.html", context)
 
-
-
-
-
 def init_testSet():
     print("SAVING INTO DATABASE\n")
     from csv import DictReader
@@ -97,8 +88,6 @@ def init_testSet():
         DBentry.save()
     
     #Posts(user=User.objects.filter(username="admin"),complex=Cities.objects.filter(name__icontains="chico"), post_title="testing",post_text="test test test", likes=2, strictness=3,amennities=1,accessibility=0,maintenence=5,grace_period=4,staff_friendlyness=0,price=5).save()
-
-
 
 def join(request):
     if (request.method == "POST"):
@@ -142,3 +131,13 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("home")
+
+def rate_view(request):
+    form = RateForm()
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+    context = {
+        'form': form
+        }
+    return render(request, 'reviewDisplay.html', context=context) 

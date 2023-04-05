@@ -1,8 +1,8 @@
 from django import forms
 from .models import Cities
+from .models import Posts
 from django.core import validators
 from django.contrib.auth.models import User
-
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True,
@@ -12,8 +12,6 @@ class CityForm(forms.Form):
         max_length=28)
     class Meta:
         model = Cities
-
-
         
 class JoinForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}))
@@ -28,3 +26,8 @@ class JoinForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
+
+class RateForm(forms.ModelForm):
+    class Meta:
+        model = Posts
+        exclude = ('user', 'date_created')

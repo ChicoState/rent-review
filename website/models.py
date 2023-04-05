@@ -5,7 +5,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator
 # Create your models here.
 
-
 class Cities(models.Model):
     name = models.CharField(max_length=28)
     complex_name = models.CharField(max_length=64)
@@ -15,7 +14,6 @@ class Cities(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-
 
 class Posts(models.Model):
     # Look into this?
@@ -34,7 +32,6 @@ class Posts(models.Model):
     staff_friendlyness = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
     price = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
     date_created = models.DateField(auto_now_add=True)
-
 
 class Comments(models.Model):
     post = models.ForeignKey(Posts, on_delete=models.CASCADE)
