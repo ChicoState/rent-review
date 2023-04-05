@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 # Create your views here.
 
-
 def home(request):
     if Cities.objects.all().count() == 0:
         init_testSet()
@@ -25,7 +24,6 @@ def home(request):
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
 
-
 def cityLookup(request, city_name):
     # redirect complete
     # If city name is empty
@@ -40,7 +38,7 @@ def cityLookup(request, city_name):
 
 
 
-
+@login_required(login_url='/login/')
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
         return redirect('home')
@@ -64,6 +62,7 @@ def complexLookup(request, city_name, complex_id):
     context = {"city": city[0],"complex_likes":complex_likes, "complex_data": complex_data, "post_list" : post_list}
     return  render(request, "postDisplay.html", context)
 
+@login_required(login_url='/login/')
 def postLookup(request, city_name, complex_id, post_id):
     if city_name == "" or not complex_id or not post_id:
         return redirect('home')
@@ -143,7 +142,7 @@ def user_login(request):
         print("initial render")
         return render(request, "login.html", {"login_form": LoginForm})
 
-@login_required(login_url='login/')
+@login_required(login_url='/login/')
 def user_logout(request):
     logout(request)
     return redirect("home")
