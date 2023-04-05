@@ -1,6 +1,7 @@
 from django import forms
 from website.models import Cities
 from django.core import validators
+from .models import *
 from django.contrib.auth.models import User
 
 class CityForm(forms.Form):
@@ -11,6 +12,10 @@ class CityForm(forms.Form):
         max_length=28)
     class Meta:
         model = Cities
+        # #
+        # here we add the fields here to make the image
+        # #
+        fields = ['name','hotel_Main_Img']
 ######===============================================
 # AGGM
 # Created the form to add new users working

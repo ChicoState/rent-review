@@ -125,3 +125,16 @@ def user_logout(request):
         #LOGOUT the user
         logout(request)
         return redirect("")
+def cities_images_view(request):
+    if request.method == 'POST':
+        form = CityForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect('success')
+    else:
+        form = CityForm()
+    return render(request, 'hotel_image_form.html',{'form':form})
+
+def success(request):
+    return HttpResponse('successfully uploaded')

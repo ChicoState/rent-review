@@ -27,6 +27,13 @@ SECRET_KEY = "django-insecure-z%ig02%c3dl$(&i1k1!c@mx=#&7dk2)&6c*v5(9dt^vp%f_f92
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+#MEDIA FALLOW TUTRIORAL
+#allowing access to the images in the url
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#This is used for the media URL to access by the http,
+#allowing users to check their uploaded images
+#
+MEDIA_URL = '/media/'
 
 
 # Application definition
