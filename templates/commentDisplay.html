@@ -89,7 +89,7 @@
                             <div class="d-flex flex-start w-100">
                               <div class="w-100">
                                 <h5>Reply to {{ user.user.username }}</h5>
-                                <form method="POST">
+                                <form method="POST" id="commentForm">
                                   {% csrf_token %}
                                 <div class="form-outline">
                                   {{ form }}
@@ -108,7 +108,7 @@
                                   <button type="reset" class="btn btn-secondary" style="margin-right: 3px;" >
                                     Cancel
                                   </button></a>
-                                  <button type="submit" class="btn btn-primary">Comment</button>
+                                  <button type="submit" class="btn btn-primary" >Comment</button>
                                 </div>
                               </form>
                               
@@ -123,7 +123,7 @@
                   </div>
                
             </div>
-            <div class="row overflow-auto" style="height:47%" >
+            <div class="row overflow-auto" style="height:70%" >
                 <div class="col-9 " style=" padding-left: 0%;padding-right: 0%;">
                 <ul>{% for comment in comment_list %}
                     <li class="comments" >

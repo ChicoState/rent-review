@@ -75,10 +75,8 @@ def postLookup(request, city_name, complex_id, post_id):
         if form.is_valid():
             comment_input = form.cleaned_data.get("comment_text")
             new_comment = Comments(post_id = post_id, user_id = request.user.id, comment_text = comment_input)
-            print(new_comment.comment_text)
-            print(post_id)
-            print(request.user.id)
-            new_comment.save()           
+            new_comment.save()
+            return redirect('postLookup', city_name=city_name, complex_id=complex_id, post_id=post_id)           
         else:
             print("not valid comment")
 
