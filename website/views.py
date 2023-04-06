@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Cities, Posts, Comments, User
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm
+from .forms import CityForm, LoginForm, JoinForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -68,23 +68,36 @@ def complexLookup(request, city_name, complex_id):
 def postLookup(request, city_name, complex_id, post_id):
     if city_name == "" or not complex_id or not post_id:
         return redirect('home')
-    
+    post_obj = Posts.objects.filter(pk=post_id)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment_input = form.cleaned_data.get("comment_text")
+            new_comment = Comments(post_id = post_id, user_id = request.user.id, comment_text = comment_input)
+            print(new_comment.comment_text)
+            print(post_id)
+            print(request.user.id)
+            new_comment.save()           
+        else:
+            print("not valid comment")
+
     city = list(Cities.objects.filter(pk=complex_id))
-    post_data = list(Posts.objects.filter(pk=post_id).values("strictness","amennities","accessibility","maintenence","grace_period","staff_friendlyness"))
+    
+    post_data = list(post_obj.values("strictness","amennities","accessibility","maintenence","grace_period","staff_friendlyness"))
+    post_data = dict( sorted(post_data[0].items(), key=lambda x: x[0].lower()) )
     comment_list = list(Comments.objects.filter(post__pk = post_id).only("user","comment_text", "date_created"))
     complex_likes = list(Posts.objects.filter(pk=post_id).values("likes"))[0]
     user = list(Posts.objects.filter(pk=post_id).only("user"))[0]
     post_description = list(Posts.objects.filter(pk=post_id).only("post_title", "post_text", "date_created"))[0]
 
-    context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data[0], "comment_list" : comment_list, "user": user, "post_description": post_description}
+    context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data, "comment_list" : comment_list, "user": user, "post_description": post_description, "form" : CommentForm}
     return  render(request, "commentDisplay.html", context)
 
 
 def add_post(request, city_name, complex_id):
     return redirect('home')
 
-def add_comment(request, city_name, complex_id, post_id):
-    return redirect('home')
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")
