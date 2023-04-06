@@ -19,13 +19,10 @@
           {{ form }}
           <script>
             $(function() {
-                var availableCities = [{
-                        %
-                        for city in cities %
-                    }
-                    "{{city}}", {
-                        % endfor %
-                    }
+                var availableCities = [
+                {%for city in cities %}
+                    "{{city}}", 
+                    {% endfor %}
                 ];
                 $("#searchBar").autocomplete({
                     source: availableCities
@@ -38,10 +35,12 @@
                 }
             });
           </script>
-          <!-- <button  type="submit"  class="btn">Search</button> -->
-          <a href={% url 'createComplex' %} class="btn btn-info" role="button">Create a new Complex!</a>
+          <!-- <button type="submit"  class="btn">Search</button> -->
         </div>
       </form>
+      <div>
+        <a href={% url 'createComplex' %} class="btn btn-info" role="button">Create a new Complex!</a>
+      </div>
     </div>
     <div class="center-padding"></div>
     <div class="bottom-row"></div>
