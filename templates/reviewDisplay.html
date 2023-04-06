@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
+{% endblock title %}
+{% block content %}
 
-<form method=“post”>
-    {% csrf_token %}
-    {{ form }}
-    <input class=“button” type=“submit” value=“Submit”>
+<style>
+    #fixed {
+        position: fixed;
+        top: 25px;
+        width: 100%;
+        z-index:1;
+        background-color: white;
+    }
+</style>
+
+<div id="fixed">
+    <form method=“post”>
+        <!--for-loops through all the form.key/value pairs-->
+        {% csrf_token %}
+        {{ form }}
+        <button id="buttonC" type="submit"  class="btn" >Submit</button>
 </form>
+</div>
 
 {% endblock content %}
