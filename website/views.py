@@ -38,7 +38,7 @@ def cityLookup(request, city_name):
 
 
 
-@login_required(login_url='/login/')
+
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
         return redirect('home')
