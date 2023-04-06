@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cities
+from .models import Cities, Comments
 from django.core import validators
 from django.contrib.auth.models import User
 
@@ -28,3 +28,12 @@ class JoinForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
+
+class CommentForm(forms.Form):
+    comment_text = forms.CharField(required=True,
+        label='',
+        widget=forms.widgets.Textarea(attrs={"id":"commentTextArea", "rows":"3" }),
+        max_length=1028)
+    class Meta:
+        model = Comments
+        

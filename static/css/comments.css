@@ -12,6 +12,15 @@
 #addCommentButton {
     background-color: #5daaf3;
     height: 100%;
+    white-space: nowrap; 
+    min-width: auto; 
+    min-height: auto;
+}
+
+#commentTextArea {
+  resize: none;
+  border-radius: 0.3rem;
+  width: 100%;
 }
 
 
@@ -25,38 +34,24 @@
   }
   
   /* The actual popup (appears on top) */
-  .popup .popuptext {
+  .popup .popupComment {
     visibility: hidden;
-    width: 160px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
     position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -80px;
+    width: 91%;
+    height: 
   }
   
   /* Popup arrow */
-  .popup .popuptext::after {
+  .popup .popupComment::after {
     content: "";
     position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
   }
   
   /* Toggle this class when clicking on the popup container (hide and show the popup) */
   .popup .show {
     visibility: visible;
-    -webkit-animation: fadeIn 1s;
-    animation: fadeIn 1s
+    -webkit-animation: fadeIn 0.3s;
+    animation: fadeIn 0.3s
   }
   
   /* Add animation (fade in the popup) */
@@ -69,3 +64,60 @@
     from {opacity: 0;}
     to {opacity:1 ;}
   }
+
+  #CitiesContent {
+    padding-top: 2%;
+    margin: 1%;
+    background-color: #5daaf3;
+}
+
+#rowgutter {
+    margin-right: 0px;
+}
+
+#fixed {
+    position: fixed;
+    top: 25px;
+    width: 100%;
+    z-index:1;
+    background-color: white;
+}
+.checked {
+        color: orange;
+}
+.popup {
+position: relative;
+display: inline-block;
+cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popupComment {
+visibility: hidden;
+position: absolute;
+z-index: 1;
+}
+
+/* Popup arrow */
+.popup .popupComment::after {
+content: "";
+position: absolute;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+visibility: visible;
+-webkit-animation: fadeIn 1s;
+animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+from {opacity: 0;}
+to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+from {opacity: 0;}
+to {opacity:1 ;}
+}

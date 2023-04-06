@@ -28,7 +28,6 @@ urlpatterns = [
     path('<city_name>/<complex_id>/', website_view.complexLookup,  name='complexLookup'),
     path('<city_name>/<complex_id>/addPost', website_view.add_post,  name='add_post'),
     path('<city_name>/<complex_id>/<post_id>', website_view.postLookup,  name='postLookup'),
-    path('<city_name>/<complex_id>/<post_id>/addComment', website_view.add_comment,  name='add_comment'),
     path('/join/', website_view.join, name='join'),
     path('/login/', website_view.user_login, name='login'),
     path('/logout/', website_view.user_logout, name='logout'),
