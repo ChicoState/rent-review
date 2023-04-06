@@ -5,8 +5,10 @@ from .forms import CityForm, LoginForm, JoinForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
-# Create your views here.
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.encoding import iri_to_uri
 
+# Create your views here.
 
 def home(request):
     if Cities.objects.all().count() == 0:
@@ -25,7 +27,6 @@ def home(request):
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
 
-
 def cityLookup(request, city_name):
     # redirect complete
     # If city name is empty
@@ -37,7 +38,6 @@ def cityLookup(request, city_name):
     for i in range(len(cities)):
         print(cities[i].name, cities[i].complex_name)
     return render(request, "complexDisplay.html", context=context)
-
 
 
 
@@ -63,6 +63,7 @@ def complexLookup(request, city_name, complex_id):
     print(post_list)
     context = {"city": city[0],"complex_likes":complex_likes, "complex_data": complex_data, "post_list" : post_list}
     return  render(request, "postDisplay.html", context)
+
 
 def postLookup(request, city_name, complex_id, post_id):
     if city_name == "" or not complex_id or not post_id:
@@ -119,18 +120,22 @@ def join(request):
 def user_login(request):
     print("in login function")
     if (request.method == 'POST'):
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
+        form = LoginForm(request.POST)
+        if form.is_valid():
             print("form is valid")
-            username = login_form.cleaned_data["username"]
-            password = login_form.cleaned_data["password"]
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user:
                 if user.is_active:
                     login(request,user)
                     print("user loggedin")
-                    print(request.META['HTTP_REFERER'])
-                    #return HttpResponseRedirect(request.META['HTTP_REFERER'])
+                    redirect_to = request.GET['next']
+                    print(redirect_to)
+                    url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
+                    if url_is_safe:
+                        url = iri_to_uri(redirect_to)
+                        return redirect(url)
                     return redirect('home')
                 else:
                     print("user not active")
@@ -138,12 +143,18 @@ def user_login(request):
             else:
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(username,password))
-                return render(request,  "login.html", {"login_form": LoginForm})
+                return render(request,  "login.html", {"form": LoginForm})
     else:
         print("initial render")
-        return render(request, "login.html", {"login_form": LoginForm})
+        return render(request, "login.html", {"form": LoginForm})
 
-@login_required(login_url='login/')
+@login_required(login_url='/login/')
 def user_logout(request):
     logout(request)
-    return redirect("home")
+    redirect_to = request.GET['next']
+    print(redirect_to)
+    url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
+    if url_is_safe:
+        url = iri_to_uri(redirect_to)
+        return redirect(url)
+    return redirect('home')
