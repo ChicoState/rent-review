@@ -11,7 +11,7 @@ class Cities(models.Model):
     complex_name = models.CharField(max_length=64)
     address = models.CharField(max_length=64)
     url = models.CharField(max_length=128)
-    zipcode = models.IntegerField(max_length=5)
+    zipcode = models.IntegerField()
 
     def __str__(self):
         return f"{self.name}"
