@@ -18,6 +18,7 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from website import views as website_view
+from website.views import  *
 # #
 # AGGM added join and login
 # #
@@ -29,7 +30,9 @@ urlpatterns = [
     path('join/', website_view.join),
     path('login/',website_view.user_login),
     path('logout/',website_view.user_logout),
+    path('image_upload',cities_images_view,name='image_upload'),
+    path('success',success, name ='success'),
     
 ]
-#if settings.DEBUG:
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

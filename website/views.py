@@ -134,7 +134,7 @@ def cities_images_view(request):
             return redirect('success')
     else:
         form = CityForm()
-    return render(request, 'hotel_image_form.html',{'form':form})
+    return render(request, 'imageUpload.html',{'form':form})
 
 def success(request):
     return HttpResponse('successfully uploaded')
