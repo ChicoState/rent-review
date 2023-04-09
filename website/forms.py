@@ -1,6 +1,5 @@
 from django import forms
-from .models import Cities
-from .models import Posts
+from .models import Cities, Comments, Posts
 from django.core import validators
 from django.contrib.auth.models import User
 
@@ -27,7 +26,15 @@ class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
 
+class CommentForm(forms.Form):
+    comment_text = forms.CharField(required=True,
+        label='',
+        widget=forms.widgets.Textarea(attrs={"id":"commentTextArea", "rows":"3" }),
+        max_length=1028)
+    class Meta:
+        model = Comments
+
 class RateForm(forms.ModelForm):
     class Meta:
         model = Posts
-        fields = '__all__'
+        exclude = ['user', 'date_created']

@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+#from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 from website import views as website_view
 
 urlpatterns = [
@@ -25,9 +26,10 @@ urlpatterns = [
     path('<city_name>/<complex_id>/', website_view.complexLookup,  name='complexLookup'),
     path('<city_name>/<complex_id>/addPost', website_view.add_post,  name='add_post'),
     path('<city_name>/<complex_id>/<post_id>', website_view.postLookup,  name='postLookup'),
-    path('<city_name>/<complex_id>/<post_id>/addComment', website_view.add_comment,  name='add_comment'),
     path('/join/', website_view.join, name='join'),
     path('/login/', website_view.user_login, name='login'),
     path('/logout/', website_view.user_logout, name='logout'),
+    #path('/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    #path('/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]

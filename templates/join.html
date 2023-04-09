@@ -6,12 +6,17 @@ Join Page
 {% block head %}
 <style>
   #fixed {
-      position: fixed;
-      top: 70px;
-      width: 100%;
-      z-index:1;
-      background-color: white;
-  }
+        position: absolute;
+        left: 50%; /* relative to nearest positioned ancestor or body element */
+        top: 50%; /*  relative to nearest positioned ancestor or body element */
+        transform: translate(-50%, -50%);
+
+        background-color: white;
+
+    }
+    h1 {
+        text-align: center;
+    }
 </style>
 {% endblock head %}
 {% block content %}

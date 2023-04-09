@@ -51,13 +51,13 @@
           <li>
             <a href={% url 'home' %}>Home</a>
           </li>
-          {% if user.is_authenticated %}
+          {% if request.user.is_authenticated %}
           <li>
-            <a href={% url 'logout' %}>Logout ({{user.username}})</a>
+            <a href="{% url 'logout' %}?next={{request.path}}">Logout ({{request.user.username}})</a>
           </li>
           {% else %}
           <li>
-            <a href={% url 'login' %}>Login</a>
+            <a href="{% url 'login' %}?next={{request.path}}">Login</a>
           </li>
           {% endif %}
           <li>
