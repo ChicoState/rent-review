@@ -14,7 +14,7 @@ class Cities(models.Model):
     zipcode = models.IntegerField()
 
     def __str__(self):
-        return f"{self.complex_name}"
+        return f"{self.name}, {self.complex_name}"
 
 
 class Posts(models.Model):
