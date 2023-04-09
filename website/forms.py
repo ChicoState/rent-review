@@ -37,4 +37,4 @@ class CommentForm(forms.Form):
 class RateForm(forms.ModelForm):
     class Meta:
         model = Posts
-        exclude = ['user', 'date_created']
+        exclude = ['user', 'complex', 'date_created']
