@@ -91,10 +91,14 @@ def postLookup(request, city_name, complex_id, post_id):
     return  render(request, "commentDisplay.html", context)
 
 def add_post(request, city_name, complex_id):
-    form = RateForm()
+    #form = RateForm()
     if request.method == "POST":
+        form = RateForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect("/ratings/")
+    else:
+        form = RateForm()
     context = {
         'form': form
         }
