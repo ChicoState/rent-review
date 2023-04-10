@@ -7,27 +7,21 @@ Create a Review
     document.getElementById("add").innerHTML += `<h1 style="text-align:center">Create a Review</h1>`
 </script>
 {% block head %}
+<script src="{% static 'js/addReview.js' %}"></script>
 <style> 
     #rowgutter {
-        margin-right: 0px;
-        height: 30px;
-    }
-
-    #Reviews {
-        padding-top: 2%;
-        margin: 1%;
-        background-color: #5daaf3;
+        margin-left: 20px;
     }
 
     .rating-list li {
         float: right;
         color: #ddd;
-        padding: 10px 5px;
+        padding: 5px 2px;
     }
 
     .rating-list li:hover,
     .rating-list li:hover ~ li {
-        color: orange;
+        color: #ff7f24;
     }
 
     .rating-list {
@@ -40,38 +34,43 @@ Create a Review
 </style>
 {% endblock head %}
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center" style="margin-top:160px" id="rowgutter">
-        <div class="col-6 justify-content-center d-inline-block overflow-scroll">
+<div class="container" float="left">
+    <div class="row justify-content-left" style="margin-top:30px" id="rowgutter">
+        <div class="col-2 justify-content-center d-inline-block overflow-scroll">
             <form method=“post”>
                 {% csrf_token %}
-                <div class="container" style="padding: 2em">
+                <div class="container style="padding: 4em">
                     {% for field in form %}
-                        <div class="card" style="width: 15rem;">
-                            <div class="card-body">
-                                <ul class="btn btn-light list-inline rating-list">
-                                    <li onclick="rate(5, {{post.id}})">
-                                        <i class="fa fa-star {% if post.user_rating > 4 %} checked {% endif %}" title="Rate 5"></i></li>
-                                    <li onclick="rate(4, {{ post.id }})">
-                                        <i class="fa fa-star {% if post.user_rating > 3 %} checked {% endif %}" title="Rate 4"></i></li>
-                                    <li onclick="rate(3, {{ post.id }})">
-                                        <i class="fa fa-star {% if post.user_rating > 2 %} checked {% endif %}" title="Rate 3"></i></li>
-                                    <li onclick="rate(2, {{ post.id }})">
-                                        <i class="fa fa-star {% if post.user_rating > 1 %} checked {% endif %}" title="Rate 2"></i></li>
-                                    <li onclick="rate(1, {{ post.id }})">
-                                        <i class="fa fa-star {% if post.user_rating > 0 %} checked {% endif %}" title="Rate 1"></i></li>
-                                </ul>
-                            </div>
+                        <div class = "row">
+                            <div class="fieldWrapper">
+                                {{ field.errors }}
+                                <div class="col-2 ">{{ field.label_tag }}</div>
+                                <div class="col-2 ">{{ field }}</div>
+                                    {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                    {% endif %}
+                            </div> 
+                            {%if field.field.widget.input_type == "hidden" %}
+                        <div class="card-body">
+                            <ul class="btn btn-light list-inline rating-list " id="{{ field.auto_id }}_div">
+                                <li onclick="toggleStarRating(5, '{{ field.auto_id }}')">
+                                    <i class="fa fa-star " title="Rate 5"></i></li>
+                                <li onclick="toggleStarRating(4, '{{ field.auto_id }}')">
+                                    <i class="fa fa-star " title="Rate 4"></i></li>
+                                <li onclick="toggleStarRating(3, '{{ field.auto_id }}')">
+                                    <i class="fa fa-star " title="Rate 3"></i></li>
+                                <li onclick="toggleStarRating(2, '{{ field.auto_id }}')">
+                                    <i class="fa fa-star " title="Rate 2"></i></li>
+                                <li onclick="toggleStarRating(1, '{{ field.auto_id }}')">
+                                    <i class="fa fa-star " title="Rate 1"></i></li>
+                            </ul>
                         </div>
-                    <div class="fieldWrapper">
-                        {{ field.errors }}
-                        {{ field.label_tag }} {{ field }}
-                            {% if field.help_text %}
-                            <p class="help">{{ field.help_text|safe }}</p>
-                            {% endif %}
-                    </div>    
+                    {%endif%} 
+                </div>  
                     {% endfor %}
                 </div>
+                <div class="fieldWrapper row justify-content-center" style="margin-top:20px"
+                    id="rowgutter">
                     <button type="submit" class="btn btn-primary">Post Review</button>
                 </div>
             </form>

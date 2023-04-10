@@ -62,7 +62,6 @@ def complexLookup(request, city_name, complex_id):
     context = {"city": city[0],"complex_likes":complex_likes, "complex_data": complex_data, "post_list" : post_list}
     return  render(request, "postDisplay.html", context)
 
-
 def postLookup(request, city_name, complex_id, post_id):
     if city_name == "" or not complex_id or not post_id:
         return redirect('home')

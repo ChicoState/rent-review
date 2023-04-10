@@ -35,6 +35,11 @@ class CommentForm(forms.Form):
         model = Comments
 
 class RateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            if visible.field.widget.input_type == 'number':
+                visible.field.widget.input_type = 'hidden'
     class Meta:
         model = Posts
-        exclude = ['user', 'date_created']
+        exclude = ['user', 'complex', 'date_created']
