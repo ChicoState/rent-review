@@ -47,7 +47,7 @@ Create a Review
                 {% csrf_token %}
                 <div class="container" style="padding: 2em">
                     {% for field in form %}
-                        <div class="card" style="width: 30rem;">
+                        <div class="card" style="width: 15rem;">
                             <div class="card-body">
                                 <ul class="btn btn-light list-inline rating-list">
                                     <li onclick="rate(5, {{post.id}})">
@@ -62,34 +62,35 @@ Create a Review
                                         <i class="fa fa-star {% if post.user_rating > 0 %} checked {% endif %}" title="Rate 1"></i></li>
                                 </ul>
                             </div>
-            <div class="fieldWrapper">
-                {{ field.errors }}
-                {{ field.label_tag }} {{ field }}
-                {% if field.help_text %}
-                <p class="help">{{ field.help_text|safe }}</p>
-                {% endif %}
-            {% endfor %}   
-        </div>
-                    <script>
-                        const rate = (rating, post_id) => {
-                            fetch(`/rate/${post_id}/${rating}/`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                }
-                            }).then(rest => {
-                                window.location.reload();
-                            })
-                        }
-                    </script>
                         </div>
-
-                    </div>
-                        <button type="submit" class="btn btn-primary">Post Review</button></form>
-                    </div> 
+                    <div class="fieldWrapper">
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field }}
+                            {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                            {% endif %}
+                    </div>    
+                    {% endfor %}
+                </div>
+                    <button type="submit" class="btn btn-primary">Post Review</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+    const rate = (rating, post_id) => {
+        fetch(`/rate/${post_id}/${rating}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(rest => {
+            window.location.reload();
+        })
+    }
+</script>
 
 {% endblock content %}
 <!--for-loops through all the form.key/value pairs-->
