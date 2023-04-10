@@ -14,7 +14,7 @@ class Cities(models.Model):
     zipcode = models.IntegerField()
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name}, {self.complex_name}"
 
 
 class Posts(models.Model):
@@ -25,15 +25,24 @@ class Posts(models.Model):
     complex = models.ForeignKey(Cities, on_delete=models.CASCADE)
     post_title = models.CharField(max_length=128)
     post_text = models.CharField(max_length=1028)
-    likes = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    strictness = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    amennities = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    accessibility = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    maintenence = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    grace_period = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    staff_friendlyness = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
-    price = models.IntegerField(default=0,validators=[MaxValueValidator(5)])
+    likes = models.IntegerField(default=0, validators=[MaxValueValidator(5)])
+    strictness = models.IntegerField(
+        default=0, validators=[MaxValueValidator(5)])
+    amennities = models.IntegerField(
+        default=0, validators=[MaxValueValidator(5)])
+    accessibility = models.IntegerField(
+        default=0, validators=[MaxValueValidator(5)])
+    maintenence = models.IntegerField(
+        default=0, validators=[MaxValueValidator(5)])
+    grace_period = models.IntegerField(
+        default=0, validators=[MaxValueValidator(5)])
+    staff_friendlyness = models.IntegerField(
+        default=0, validators=[MaxValueValidator(5)])
+    price = models.IntegerField(default=0, validators=[MaxValueValidator(5)])
     date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}, {self.complex}, {self.post_title}"
 
 
 class Comments(models.Model):
@@ -41,3 +50,6 @@ class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_text = models.CharField(max_length=512)
     date_created = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.post}"
