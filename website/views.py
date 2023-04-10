@@ -109,8 +109,8 @@ def index(request) -> HttpResponse:
         post.user_rating = rating.rating if rating else 0
     return render(request, "reviewDisplay.html", {"posts": posts})
 
-def rate(request, complex_id, rating:int) -> HttpResponse:
-    post = RateForm.objects.get(id=complex_id)
+def rate(request, post_id:int, rating:int) -> HttpResponse:
+    post = RateForm.objects.get(id=post_id)
     RateForm.objects.filter(post=post, user=request.user).delete()
     post.rating_set.create(user=request.user, rating=rating)
     return index(request)

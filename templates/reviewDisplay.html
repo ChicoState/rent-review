@@ -54,13 +54,29 @@ Create a Review
           <div class="row justify-content-center" id="rowgutter" style="margin: top 1px;">
           </div>
         </div>
-
-    <div class="container" style="padding: 2em">
-
     <form method=“post”>
         <!--for-loops through all the form.key/value pairs-->
         {% csrf_token %}
+        <div class="col-6 justify-content-center d-inline-block overflow-scroll">
+        <div class="container" style="padding: 2em">
         {% for field in form %}
+        <div class="card" style="width: 30rem;">
+            <div class="card-body">
+              <!-- <h5 class="card-title">{{ post.header }}</h5>
+              <p class="card-text">{{ post.text }}</p> -->
+              <ul class="btn btn-light list-inline rating-list">
+                <li onclick="rate(5, {{post.id}})">
+                    <i class="fa fa-star {% if post.user_rating > 4 %} checked {% endif %}" title="Rate 5"></i></li>
+                <li onclick="rate(4, {{ post.id }})">
+                    <i class="fa fa-star {% if post.user_rating > 3 %} checked {% endif %}" title="Rate 4"></i></li>
+                <li onclick="rate(3, {{ post.id }})">
+                    <i class="fa fa-star {% if post.user_rating > 2 %} checked {% endif %}" title="Rate 3"></i></li>
+                <li onclick="rate(2, {{ post.id }})">
+                    <i class="fa fa-star {% if post.user_rating > 1 %} checked {% endif %}" title="Rate 2"></i></li>
+                <li onclick="rate(1, {{ post.id }})">
+                    <i class="fa fa-star {% if post.user_rating > 0 %} checked {% endif %}" title="Rate 1"></i></li>
+              </ul>
+            </div>
         <div class="fieldWrapper">
             {{ field.errors }}
             {{ field.label_tag }} {{ field }}
@@ -68,9 +84,24 @@ Create a Review
             <p class="help">{{ field.help_text|safe }}</p>
             {% endif %}
         </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Post Review</button></form>
+        {% endfor %}    
     </div>
+    <script>
+        const rate = (rating, post_id) => {
+            fetch(`/rate/${post_id}/${rating}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(rest => {
+                window.location.reload();
+            })
+        }
+    </script>
+    </div>
+
+    </div>
+        <button type="submit" class="btn btn-primary">Post Review</button></form>
 </div>
 
 {% endblock content %}
