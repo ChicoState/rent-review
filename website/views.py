@@ -91,18 +91,29 @@ def postLookup(request, city_name, complex_id, post_id):
     return  render(request, "commentDisplay.html", context)
 
 def add_post(request, city_name, complex_id):
-    #form = RateForm()
+    form = RateForm()
     if request.method == "POST":
         form = RateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("/ratings/")
-    else:
-        form = RateForm()
+            form = RateForm()
     context = {
         'form': form
         }
     return render(request, 'reviewDisplay.html', context=context)
+
+def index(request) -> HttpResponse:
+    posts = RateForm.objects.all()
+    for post in posts:
+        rating = RateForm.objects.filter(post=post, user=request.user).first()
+        post.user_rating = rating.rating if rating else 0
+    return render(request, "reviewDisplay.html", {"posts": posts})
+
+def rate(request, complex_id, rating:int) -> HttpResponse:
+    post = RateForm.objects.get(id=complex_id)
+    RateForm.objects.filter(post=post, user=request.user).delete()
+    post.rating_set.create(user=request.user, rating=rating)
+    return index(request)
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")

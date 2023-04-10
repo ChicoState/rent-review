@@ -1,24 +1,66 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
+Create a Review
 {% endblock title %}
 {% block content %}
-
-<style>
-    #fixed {
+<script>
+    document.getElementById("add").innerHTML += `<h1 style="text-align:center">Create a Review</h1>`
+</script>
+<style> 
+   #fixed {
         position: fixed;
-        top: 25px;
+        padding-top: 3%;
+        margin: 1%;
+        top: 1px;
         width: 100%;
-        z-index:1;
+        z-index: 1;
         background-color: white;
+    }
+
+    #rowgutter {
+        margin-right: 50px;
+        height: 1px;
+    }
+
+    #Reviews {
+        padding-top: 2%;
+        margin: 2%;
+        background-color: #5daaf3;
+    }
+
+    .rating-list li {
+        float: right;
+        color: #ddd;
+        padding: 10px 5px;
+    }
+
+    .rating-list li:hover,
+    .rating-list li:hover ~ li {
+        color: orange;
+    }
+
+    .rating-list {
+        display: inline-block;
+        list-style: none;
+    }
+    .checked {
+        color: orange;
     }
 </style>
 
 <div id="fixed">
+        <div class="container">
+          <div class="row justify-content-center" id="rowgutter" style="margin: top 1px;">
+          </div>
+        </div>
+
+    <div class="container" style="padding: 2em">
+
     <form method=“post”>
         <!--for-loops through all the form.key/value pairs-->
         {% csrf_token %}
-        {% for reviews in Review %}
+        {% for field in form %}
         <div class="fieldWrapper">
             {{ field.errors }}
             {{ field.label_tag }} {{ field }}
@@ -27,8 +69,8 @@
             {% endif %}
         </div>
         {% endfor %}
-        <button id="buttonC" type="submit"  class="btn" >Submit</button>
-</form>
+        <button type="submit" class="btn btn-primary">Post Review</button></form>
+    </div>
 </div>
 
 {% endblock content %}
