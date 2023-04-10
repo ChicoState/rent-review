@@ -110,10 +110,11 @@ def add_post(request, city_name, complex_id):
             url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
             if url_is_safe:
                 url = iri_to_uri(redirect_to)
-                return redirect('home')
-                #return redirect(url)
+                redirect_url = str(city_name) + "/" + str(complex_id) + "/" + str(new_post.id)
+                return redirect(redirect_url)
             else:
-                return redirect('home')
+                redirect_url = str(city_name) + "/" + str(complex_id) + "/" + str(new_post.id)
+                return redirect(redirect_url)
     context = {
         'form': form
         }
