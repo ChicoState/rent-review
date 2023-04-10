@@ -39,6 +39,7 @@ Create a Review
         <div class="col-2 justify-content-center d-inline-block overflow-scroll">
             <form method=“post”>
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{request.get_full_path}}"/>
                 <div class="container style="padding: 4em">
                     {% for field in form %}
                         <div class = "row">

@@ -8,8 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
 
-# Create your views here.
-
 def home(request):
     if Cities.objects.all().count() == 0:
         init_testSet()
@@ -20,9 +18,9 @@ def home(request):
             if Cities.objects.filter(name__icontains=city_input).exists():
                 return redirect('city_lookup', city_name=city_input)
             else:
-                print("city does not excists")
+                print("City does not exist")
         else:
-            print("not valid")
+            print("Not Valid")
     cities = list(set(Cities.objects.values_list("name", flat=True)))
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
@@ -94,25 +92,45 @@ def add_post(request, city_name, complex_id):
     if request.method == "POST":
         form = RateForm(request.POST)
         if form.is_valid():
-            form.save()
-            form = RateForm()
+            new_post = Posts(user_id = request.user.id,
+                             complex_id = complex_id,
+                             post_title = form.cleaned_data.get("post_title"),
+                             post_text = form.cleaned_data.get("post_text"),
+                             likes = form.cleaned_data.get("likes"),
+                             strictness = form.cleaned_data.get("strictness"),
+                             amennities = form.cleaned_data.get("amennities"),
+                             accessibility = form.cleaned_data.get("accessibility"),
+                             maintenence = form.cleaned_data.get("maintenence"),
+                             grace_period = form.cleaned_data.get("grace_period"),
+                             staff_friendlyness = form.cleaned_data.get("staff_friendlyness"),
+                             price = form.cleaned_data.get("price"))
+            new_post.save()
+            redirect_to = request.GET['next']
+            print(redirect_to)
+            url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
+            if url_is_safe:
+                url = iri_to_uri(redirect_to)
+                return redirect('home')
+                #return redirect(url)
+            else:
+                return redirect('home')
     context = {
         'form': form
         }
     return render(request, 'reviewDisplay.html', context=context)
 
-def index(request) -> HttpResponse:
-    posts = RateForm.objects.all()
-    for post in posts:
-        rating = RateForm.objects.filter(post=post, user=request.user).first()
-        post.user_rating = rating.rating if rating else 0
-    return render(request, "reviewDisplay.html", {"posts": posts})
+# def index(request) -> HttpResponse:
+#     posts = RateForm.objects.all()
+#     for post in posts:
+#         rating = RateForm.objects.filter(post=post, user=request.user).first()
+#         post.user_rating = rating.rating if rating else 0
+#     return render(request, "reviewDisplay.html", {"posts": posts})
 
-def rate(request, post_id:int, rating:int) -> HttpResponse:
-    post = RateForm.objects.get(id=post_id)
-    RateForm.objects.filter(post=post, user=request.user).delete()
-    post.rating_set.create(user=request.user, rating=rating)
-    return index(request)
+# def rate(request, post_id:int, rating:int) -> HttpResponse:
+#     post = RateForm.objects.get(id=post_id)
+#     RateForm.objects.filter(post=post, user=request.user).delete()
+#     post.rating_set.create(user=request.user, rating=rating)
+#     return index(request)
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")
