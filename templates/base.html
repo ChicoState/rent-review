@@ -22,14 +22,14 @@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
           rel="stylesheet"
           type="text/css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% comment %} Bootstrap.html contents {% endcomment %}
     {% comment %} Responsive viewport {% endcomment %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/hammenu.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <script src="{% static 'js/hammburger.js' %}"></script>
-
     <title>
       {% block title %}
       {% endblock title %}
@@ -39,7 +39,13 @@
   </head>
   <body>
     <div class="header" id = "add">
-      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu" onclick ="hideMenu()">
+      <div style=" float:right; padding-right: 20px; padding-top:10px; margin-left:auto; margin-right: 0;">
+        <a href={% url 'createComplex' %}><button type="button" class="btn btn-primary">Add Your Complex!</button></a>
+      </div>
+      <input type="checkbox"
+             class="openSidebarMenu"
+             id="openSidebarMenu"
+             onclick="hideMenu()">
       <label for="openSidebarMenu" class="sidebarIconToggle">
         <div class="spinner diagonal part-1"></div>
         <div class="spinner horizontal"></div>

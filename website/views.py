@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Cities, Posts, Comments, User
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm, CommentForm, RateForm
+from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm, RateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -31,19 +31,21 @@ def cityLookup(request, city_name):
     if city_name == "":
         return redirect('home')
     else:
-        cities = list(Cities.objects.filter(name__icontains=city_name).order_by("complex_name"))
+        cities = list(Cities.objects.filter(
+            name__icontains=city_name).order_by("complex_name"))
     context = {"cities": cities}
-    for i in range(len(cities)):
-        print(cities[i].name, cities[i].complex_name)
+    # for i in range(len(cities)):
+    #     print(cities[i].name, cities[i].complex_name)
     return render(request, "complexDisplay.html", context=context)
 
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
         return redirect('home')
-    
+
     city = list(Cities.objects.filter(pk=complex_id))
     print(city)
-    post_list = list(Posts.objects.filter(complex__pk=complex_id).only("user", "post_title", "likes", "id"))
+    post_list = list(Posts.objects.filter(complex__pk=complex_id).only(
+        "user", "post_title", "likes", "id"))
     complex_data = {}
     complex_data["Strictness"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("strictness"))["strictness__avg"] or 0
     complex_data["Amennities"] = Posts.objects.filter(complex__pk=complex_id).aggregate(Avg("amennities"))["amennities__avg"] or 0
@@ -82,7 +84,8 @@ def postLookup(request, city_name, complex_id, post_id):
     comment_list = list(Comments.objects.filter(post__pk = post_id).only("user","comment_text", "date_created"))
     complex_likes = list(Posts.objects.filter(pk=post_id).values("likes"))[0]
     user = list(Posts.objects.filter(pk=post_id).only("user"))[0]
-    post_description = list(Posts.objects.filter(pk=post_id).only("post_title", "post_text", "date_created"))[0]
+    post_description = list(Posts.objects.filter(pk=post_id).only(
+        "post_title", "post_text", "date_created"))[0]
 
     context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data, "comment_list" : comment_list, "user": user, "post_description": post_description, "form" : CommentForm}
     return  render(request, "commentDisplay.html", context)
@@ -158,12 +161,13 @@ def join(request):
             user.save()
             return redirect("home")
         else:
-            return render(request, "join.html", { "join_form": join_form })
+            return render(request, "join.html", {"join_form": join_form})
     else:
-        return render(request, "join.html", { "join_form": JoinForm })
+        return render(request, "join.html", {"join_form": JoinForm})
+
 
 def user_login(request):
-    print("in login function")
+    # print("in login function")
     if (request.method == 'POST'):
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -173,7 +177,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user:
                 if user.is_active:
-                    login(request,user)
+                    login(request, user)
                     print("user loggedin")
                     redirect_to = request.GET['next']
                     print(redirect_to)
@@ -193,7 +197,8 @@ def user_login(request):
         print("initial render")
         return render(request, "login.html", {"form": LoginForm})
 
-@login_required(login_url='/login/')
+
+@login_required(login_url='login/')
 def user_logout(request):
     logout(request)
     redirect_to = request.GET['next']
@@ -203,3 +208,15 @@ def user_logout(request):
         url = iri_to_uri(redirect_to)
         return redirect(url)
     return redirect('home')
+
+
+def createComplex(request):
+    if request.method == "POST":
+        form = CreateComplexForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+    else:
+        form = CreateComplexForm()
+    context = {'form': form}
+    return render(request, "createComplex.html", context=context)
