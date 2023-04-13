@@ -1,50 +1,80 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Login Page
+  Login Page
 {% endblock title %}
 {% block head %}
-<style>
-    #fixed {
-        position: absolute;
-        left: 50%; /* relative to nearest positioned ancestor or body element */
-        top: 50%; /*  relative to nearest positioned ancestor or body element */
-        transform: translate(-50%, -50%);
-
-        background-color: white;
-
+  <style>
+    input {
+        max-width: 100%;
     }
+
     h1 {
+        margin-top: 10px;
         text-align: center;
+    }
+
+        {
+        % comment %
     }
   </style>
 {% endblock head %}
 {% block content %}
-<div id="fixed">
-<div class="container">
-    <div class="row">
-        <div class="col-12 justify-content-center">
-      <h1>Login</h1>
-      <form method="POST">{% csrf_token %}
-        <table>
-          <tr>
-              <td>{{ form.username.label_tag }}</td>
-              <td>{{ form.username }}</td>
-          </tr>
-          <tr>
-              <td>{{ form.password.label_tag }}</td>
-              <td>{{ form.password }}</td>
-          </tr>
-          <tr style="text-align: center;"><td>
-            <input type="submit" class="btn btn-primary" value = "Login"/>
-          </td>
-          <td>Click <a href={% url 'join' %}>here</a> to join.</td></tr>
-          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-        </table>
+  <div class="container">
+    <h1>Login</h1>
+    <div class="form-group">
+      <form method="post">
+        {% for field in form %}
+          <div class="fieldWrapper row justify-content-center"
+               style="margin-top:10px"
+               id="rowgutter">
+            {{ field.errors }}
+            <div class="col-3" style="text-align:right">{{ field.label_tag }}</div>
+            <div class="col-3 ">{{ field }}</div>
+            {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
+          </div>
+        {% endfor %}
+        <div class="row-cols-4 fieldWrapper justify-content-center"
+             style="margin-top:10px;
+                    text-align:center">
+          <button type="submit" class="btn btn-primary">Login</button>
+          <a href={% url 'join' %}>
+            <button type="button" class="btn btn-primary">Register Here!</button>
+          </a>
+        </div>
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
       </form>
     </div>
-</div>
-</div>
   </div>
+  {% comment %} <div id="fixed">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 justify-content-center">
+          <h1>Login</h1>
+          <form method="POST">
+            {% csrf_token %}
+            <table>
+              <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>{{ form.username }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.password.label_tag }}</td>
+                <td>{{ form.password }}</td>
+              </tr>
+              <tr style="text-align: center;">
+                <td>
+                  <input type="submit" class="btn btn-primary" value = "Login"/>
+                </td>
+                <td>
+                  Click <a href={% url 'join' %}>here</a> to join.
+                </td>
+              </tr>
+              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
 {% endblock content %}
-

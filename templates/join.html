@@ -1,40 +1,53 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Join Page
+  Join Page
 {% endblock title %}
 {% block head %}
-<style>
-  #fixed {
-        position: absolute;
-        left: 50%; /* relative to nearest positioned ancestor or body element */
-        top: 50%; /*  relative to nearest positioned ancestor or body element */
-        transform: translate(-50%, -50%);
-
-        background-color: white;
-
+  <style>
+    input {
+      max-width:100%;
     }
     h1 {
-        text-align: center;
+      margin-top:10px;
+      text-align:center;
     }
-</style>
+  </style>
 {% endblock head %}
 {% block content %}
-<div id="fixed">
-<div class="container">
-      <h1>Join</h1>
-      <form method="POST">{% csrf_token %}
-        <table>
-          {{ join_form.as_table }}
-          <tr><td>
-            <input type="submit" class="btn btn-primary" value = "Join"/>
-          </td>
-          <td>Already have an account? Click <a href={% url 'login' %}>here</a> to login.</td>
-        </tr>
-        </table>
+  <div class="container">
+    <h1>Join</h1>
+    <div class="form-group">
+      <form action={% url 'login' %} method="post">
+        {% for field in join_form %}
+          <div class="fieldWrapper row justify-content-center"
+               style="margin-top:10px"
+               id="rowgutter">
+            {{ field.errors }}
+            <div class="col-1" style="text-align:right">{{ field.label_tag }}</div>
+            <div class="col-2 ">{{ field }}</div>
+            {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
+          </div>
+        {% endfor %}
+        <div class="row-cols-4 fieldWrapper row justify-content-center"
+             style="margin-top:10px;
+                    text-align:center">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
       </form>
     </div>
   </div>
-</div>
+  {% comment %} <form method="POST">
+        {% csrf_token %}
+        <table>
+          {{ join_form.as_table }}
+          <tr>
+            <td>
+              <input type="submit" class="btn btn-primary" value = "Join"/>
+            </td>
+            <td>
+              Already have an account? <a href={% url 'login' %}><input type="button" class="btn btn-primary" value="Go To Login"></a>
+            </td>
+          </tr>
+  </table> {% endcomment %}
 {% endblock content %}
-
