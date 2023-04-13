@@ -19,7 +19,7 @@
         position: fixed;
         top: 25px;
         width: 100%;
-        z-index:1;
+        z-index: 1;
         background-color: white;
     }
   </style>
@@ -34,22 +34,26 @@
       </div>
     </div>
   </div>
-  <div class="container">
-    <div class="row justify-content-center"
-         style="margin-top:150px"
-         id="rowgutter">
-      <div class="col-6 justify-content-center d-inline-block overflow-scroll">
-        {% for city in cities %}
-          <div class="row">
-            <div class="col border text-center rounded-2"
-                 id="CitiesContent"
-                 style="border-radius:50px">
-              <a href="{{ city.id }}" style="color:black">
-                <p>{{ city.complex_name }}, {{ city.address }}, {{ city.zipcode }}</p>
-              </a>
+  <div>
+    <div class="container" style="margin-top:100px">
+      <div class="row justify-content-center" id="rowgutter">
+        <div class="col" style="background-color: #FFFF;">
+          <div class="row" style="margin-top:150px">{% comment %} Map Bar {% endcomment %}</div>
+          <div class="row" style="margin-top:10px">{% comment %} Map {% endcomment %}</div>
+        </div>
+        <div class="col-3 justify-content-center d-inline-block">
+          {% for city in cities %}
+            <div class="row">
+              <div class="col border text-center rounded-4"
+                   id="CitiesContent"
+                   style="border-radius:50px">
+                <a href="{{ city.id }}" style="color:black">
+                  <p>{{ city.complex_name }}, {{ city.address }}, {{ city.zipcode }}</p>
+                </a>
+              </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
