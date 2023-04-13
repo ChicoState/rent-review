@@ -4,10 +4,7 @@
   <head>
     <meta charset="utf-8">
     {% comment %} Bootstrap.html contents {% endcomment %}
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous"/>
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/> {% endcomment %}
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
             crossorigin="anonymous"></script>
@@ -22,6 +19,11 @@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
           rel="stylesheet"
           type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% comment %} Bootstrap.html contents {% endcomment %}
@@ -38,41 +40,51 @@
     {% endblock head %}
   </head>
   <body>
-    <div class="header">
-      <div style=" float:right; padding-right: 20px; padding-top:10px; margin-left:auto; margin-right: 0;">
-        <a href={% url 'createComplex' %}><button type="button" class="btn btn-primary">Add Your Complex!</button></a>
+    <!-- Implement the Navbar -->
+    <nav class="navbar navbar-expand-sm sticky-top navbar-dark bg-primary">
+      <div class="container">
+        <!-- Replace this with your own logo -->
+        <a class="navbar-brand">Rent Review</a>
+        <!-- Toggler/collapsibe Button for small screens -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#myList"
+                aria-controls="myList"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- List of links -->
+        <div class="collapse navbar-collapse" id="myList">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href={% url 'home' %}>Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}?next={{ request.path }}">Logout ({{ request.user.username }})</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
+              </li>
+            {% endif %}
+            {% if request.user.is_superuser %}
+              <li class="nav-item">
+                <a class="nav-link" href="/admin">Admins</a>
+              </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href={% url 'createComplex' %}>Add Your Complex!</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <input type="checkbox"
-             class="openSidebarMenu"
-             id="openSidebarMenu"
-             onclick="hideMenu()">
-      <label for="openSidebarMenu" class="sidebarIconToggle">
-        <div class="spinner diagonal part-1"></div>
-        <div class="spinner horizontal"></div>
-        <div class="spinner diagonal part-2"></div>
-      </label>
-      <div id="sidebarMenu">
-        <ul class="sidebarMenuInner">
-          {% comment %} List of items inside hammenu {% endcomment %}
-          <li>
-            <a href={% url 'home' %}>Home</a>
-          </li>
-          {% if request.user.is_authenticated %}
-          <li>
-            <a href="{% url 'logout' %}?next={{request.path}}">Logout ({{request.user.username}})</a>
-          </li>
-          {% else %}
-          <li>
-            <a href="{% url 'login' %}?next={{request.path}}">Login</a>
-          </li>
-          {% endif %}
-          <li>
-            {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
-            <a href="/admin">Admins</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </nav>
     {% block content %}
     {% endblock content %}
     {% block scripts %}
