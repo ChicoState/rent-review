@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True, label='',
-                                 widget=forms.widgets.Textarea(
-                                     attrs={'style': 'width: 80%', 'style': 'height: 30px', 'id': 'searchBar', 'placeholder': 'City Name', }),
+                                 widget=forms.widgets.TextInput(
+                                     attrs={ 'style': 'height: 30px; text-align:center; border-radius:10px;', 'id': 'searchBar', 'placeholder': 'City Name', }),
                                  validators=[validators.MinLengthValidator(1)],
                                  max_length=28)
 
