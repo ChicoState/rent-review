@@ -19,34 +19,52 @@
         position: fixed;
         top: 25px;
         width: 100%;
-        z-index: 1;
         background-color: white;
+    }
+
+    #scrolldiv {
+        height: 80vh;
+        width: 100%;
+    }
+
+    #yellowdiv {
+        background-color: yellow;
+        height: 75px;
+        width: 100%;
+    }
+
+    #orangediv {
+        background-color: orange;
+        height: 700px;
+        width: 100%;
     }
   </style>
 {% endblock head %}
 {% block content %}
-  <div id="fixed">
-    <div class="container">
-      <div class="row justify-content-center"
-           id="rowgutter"
-           style="margin-top:50px">
-        <h1 style="text-align:center">Complexes in {{ cities.0.name }}</h1>
-      </div>
-    </div>
-  </div>
-  <div>
-    <div class="container" style="margin-top:100px">
-      <div class="row justify-content-center" id="rowgutter">
-        <div class="col" style="background-color: #FFFF;">
-          <div class="row" style="margin-top:150px">{% comment %} Map Bar {% endcomment %}</div>
-          <div class="row" style="margin-top:10px">{% comment %} Map {% endcomment %}</div>
+  <div class="container-fluid overflow-auto">
+    <div class="row justify-content-center"
+         id="rowgutter"
+         style="margin-top:50px">
+      <div class="col-8" style="background-color: #FFFF;">
+        <div class="row">
+          <div id="yellowdiv"></div>
+          {% comment %} Map Bar {% endcomment %}
         </div>
-        <div class="col-4 justify-content-center d-inline-block">
+        <div class="row" style="margin-top:10px">
+          <div id="orangediv"></div>
+          {% comment %} Map {% endcomment %}
+        </div>
+      </div>
+      <div class="col justify-content-center">
+        <div class="row" style="text-align:center">
+          <h3>Complexes In Chico</h3>
+        </div>
+        <div class="row overflow-scroll" id="scrolldiv" style="margin-top:10px">
           {% for city in cities %}
             <div class="row">
               <div class="col border text-center rounded-4"
                    id="CitiesContent"
-                   style="border-radius:50px">
+                   style="border-radius:80px">
                 <a href="{{ city.id }}" style="color:black">
                   <p>{{ city.complex_name }}, {{ city.address }}, {{ city.zipcode }}</p>
                 </a>
