@@ -91,8 +91,10 @@ def postLookup(request, city_name, complex_id, post_id):
     return  render(request, "commentDisplay.html", context)
 
 def add_post(request, city_name, complex_id):
-    form = RateForm()
-    if request.method == "POST":
+    #form = RateForm()
+    #it might go to default route
+    if (request.method == "POST"):
+        print("LLOOOLL")
         form = RateForm(request.POST)
         if form.is_valid():
             new_post = Posts(user_id = request.user.id,
@@ -118,6 +120,8 @@ def add_post(request, city_name, complex_id):
             else:
                 redirect_url = str(city_name) + "/" + str(complex_id) + "/" + str(new_post.id)
                 return redirect(redirect_url)
+    else:
+        form = RateForm()
     context = {
         'form': form
         }
