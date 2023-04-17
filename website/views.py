@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Cities, Posts, Comments, User, Image
+from .models import Cities, Posts, Comments, User, Hotel
 from django.db.models import Avg
-from .forms import imageForm, CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm
+from .forms import HotelForm, CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm
 #from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -189,18 +189,36 @@ def createComplex(request):
     return render(request, "createComplex.html", context=context)
 
 
-def image_upload_view(request):
+# Create your views here.
 
-    if request.method == 'POST':
-        form=imageForm(request.POST,request.FILES)
-        
-        if form.is_valid():
-            form.save()
-            #imag_obj = form.instance
-            return redirect('success')
-            #return render(request, 'imageUpload.html',{'form':form,'imag_obj':imag_obj})
-    else:
-        form = imageForm()
-    return render(request, 'imageUpload.html',{'form':form})
+
+def hotel_image_view(request):
+
+	if request.method == 'POST':
+		form = HotelForm(request.POST, request.FILES)
+
+		if form.is_valid():
+			form.save()
+			return redirect('success')
+	else:
+		form = HotelForm()
+	return render(request, 'hotel_image_form.html', {'form': form})
+
+
 def success(request):
-    return HttpResponse('successfully uploaded')
+	return HttpResponse('successfully uploaded')
+
+
+
+# Python program to view
+# for displaying images
+
+
+def display_hotel_images(request):
+
+	if request.method == 'GET':
+
+		# getting all the objects of hotel.
+		Hotels = Hotel.objects.all()
+		return render((request, 'display_hotel_images.html',
+					{'hotel_images': Hotels}))

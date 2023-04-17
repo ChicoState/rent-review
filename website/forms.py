@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cities, Comments, Image
+from .models import Cities, Comments, Hotel
 from django.core import validators
 from django.contrib.auth.models import User
 from django.db import models
@@ -59,8 +59,14 @@ class CreateComplexForm(forms.Form):
         com.save()
         return com
 
-class imageForm(forms.ModelForm):
-        """Firm for iamge"""
-        class Meta:
-            model=Image
-            fields = ['title','image']
+# forms.py
+from django import forms
+from .models import *
+
+
+class HotelForm(forms.ModelForm):
+
+	class Meta:
+		model = Hotel
+		fields = ['name', 'hotel_Main_Img']
+

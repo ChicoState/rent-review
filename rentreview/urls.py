@@ -39,8 +39,9 @@ urlpatterns = [
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path("/createComplex/", website_view.createComplex, name="createComplex"),
     #path('/upload/', website_view.image_upload_view),
-    path('upload/',website_view.image_upload_view, name="image_upload"),
-    path('success', success, name='success'),
+    path('image_upload', website_view.hotel_image_view, name='image_upload'),
+    path('success', website_view.success, name='success'),
+    path('hotel_images', website_view.display_hotel_images, name = 'hotel_images'),
 
 ]#+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

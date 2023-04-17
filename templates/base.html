@@ -29,11 +29,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/hammenu.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-<<<<<<< HEAD
     
-=======
-    <script src="{% static 'js/hammburger.js' %}"></script>
->>>>>>> main
     <title>
       {% block title %}
       {% endblock title %}
@@ -60,6 +56,9 @@
           {% comment %} List of items inside hammenu {% endcomment %}
           <li>
             <a href={% url 'home' %}>Home</a>
+          </li>
+          <li>
+            <a href={% url 'image_upload' %}>image upload</a>
           </li>
           {% if request.user.is_authenticated %}
           <li>
