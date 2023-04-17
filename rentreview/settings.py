@@ -27,14 +27,6 @@ SECRET_KEY = "django-insecure-z%ig02%c3dl$(&i1k1!c@mx=#&7dk2)&6c*v5(9dt^vp%f_f92
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-#MEDIA FALLOW TUTRIORAL
-#allowing access to the images in the url
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#This is used for the media URL to access by the http,
-#allowing users to check their uploaded images
-#
-MEDIA_URL = '/media/'
-
 
 # Application definition
 
@@ -135,6 +127,17 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [ STATIC_DIR ]
+
+#MEDIA FALLOW TUTRIORAL
+#allowing access to the images in the url
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#This is used for the media URL to access by the http,
+#allowing users to check their uploaded images
+#
+MEDIA_URL = '/media/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

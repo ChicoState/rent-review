@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Cities, Posts, Comments, User
+from .models import Cities, Posts, Comments, User, Image
 from django.db.models import Avg
 from .forms import imageForm, CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm
 #from .forms import *
@@ -191,11 +191,14 @@ def createComplex(request):
 
 def image_upload_view(request):
     if request.method == 'POST':
-        form=imageForm(request,POST,request.FILES)
+        form=imageForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
             imag_obj = form.instance
+            #return redirect('success')
             return render(request, 'imageUpload.html',{'form':form,'imag_obj':imag_obj})
     else:
         form = imageForm()
         return render(request, 'imageUpload.html',{'form':form})
+    def success(request):
+        return HttpResponse('successfully uploaded')

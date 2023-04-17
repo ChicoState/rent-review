@@ -2,7 +2,8 @@ from django import forms
 from .models import Cities, Comments, Image
 from django.core import validators
 from django.contrib.auth.models import User
-
+from django.db import models
+from django.forms import fields  
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True, label='',
@@ -62,4 +63,4 @@ class imageForm(forms.ModelForm):
         """Firm for iamge"""
         class Meta:
             model = Image
-            fields = ('title','image')
+            fields = '__all__'

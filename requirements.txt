@@ -1,4 +1,4 @@
 Django>=4.0
 psycopg2>=2.8
 django-star-ratings
-pillow>=3
+Pillow>=3

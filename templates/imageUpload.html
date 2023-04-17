@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset ="UTF-8">
-        <title>IMAGE</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel_image</title>
+</head>
 <body>
-    <form method="post" enctyp="multipart/for-data">
-        <!---CSRF_TOKEN protects against cross-site requests-->
-        {%csrf_token%}
-        {{form.as_p}}
+    <form method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
         <button type="submit">Upload</button>
     </form>
-    {% if img_obj %}
-    <h3>Succesfully uploaded : {{img_obj.title}}</h3>
-    <img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">
-    {% endif %}
 </body>
 </html>

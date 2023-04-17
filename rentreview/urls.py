@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path
+from django.urls.conf import include
 #from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static 
@@ -37,7 +38,9 @@ urlpatterns = [
     #path('/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path("/createComplex/", website_view.createComplex, name="createComplex"),
-    path('/upload/', website_view.image_upload_view),
-]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    #path('/upload/', website_view.image_upload_view),
+    path('/image_upload/',website_view.image_upload_view, name="iamge-request"),
+
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#if settings.DEBUG:
+#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

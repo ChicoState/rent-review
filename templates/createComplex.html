@@ -39,7 +39,7 @@
          style="margin-top:160px"
          id="rowgutter">
       <div class="col-6 justify-content-center d-inline-block overflow-scroll">
-        <form action={% url 'createComplex' %} method="post">
+        <form action={% url 'createComplex' %} method="post", enctype="multipart/form-data">
           {% csrf_token %}
           {% for field in form %}
             <div class="fieldWrapper row justify-content-center"
