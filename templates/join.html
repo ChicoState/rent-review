@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <html>
     <head>
         {%include "tamplates/base.html"%}
@@ -21,3 +22,45 @@
     </body>
 </html>
 <!----Added join AGGM----->
+=======
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Join Page
+{% endblock title %}
+{% block head %}
+<style>
+  #fixed {
+        position: absolute;
+        left: 50%; /* relative to nearest positioned ancestor or body element */
+        top: 50%; /*  relative to nearest positioned ancestor or body element */
+        transform: translate(-50%, -50%);
+
+        background-color: white;
+
+    }
+    h1 {
+        text-align: center;
+    }
+</style>
+{% endblock head %}
+{% block content %}
+<div id="fixed">
+<div class="container">
+      <h1>Join</h1>
+      <form method="POST">{% csrf_token %}
+        <table>
+          {{ join_form.as_table }}
+          <tr><td>
+            <input type="submit" class="btn btn-primary" value = "Join"/>
+          </td>
+          <td>Already have an account? Click <a href={% url 'login' %}>here</a> to login.</td>
+        </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+>>>>>>> main

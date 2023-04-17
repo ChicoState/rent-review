@@ -22,12 +22,18 @@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
           rel="stylesheet"
           type="text/css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% comment %} Bootstrap.html contents {% endcomment %}
     {% comment %} Responsive viewport {% endcomment %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'css/hammenu.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+<<<<<<< HEAD
     
+=======
+    <script src="{% static 'js/hammburger.js' %}"></script>
+>>>>>>> main
     <title>
       {% block title %}
       {% endblock title %}
@@ -37,7 +43,13 @@
   </head>
   <body>
     <div class="header">
-      <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
+      <div style=" float:right; padding-right: 20px; padding-top:10px; margin-left:auto; margin-right: 0;">
+        <a href={% url 'createComplex' %}><button type="button" class="btn btn-primary">Add Your Complex!</button></a>
+      </div>
+      <input type="checkbox"
+             class="openSidebarMenu"
+             id="openSidebarMenu"
+             onclick="hideMenu()">
       <label for="openSidebarMenu" class="sidebarIconToggle">
         <div class="spinner diagonal part-1"></div>
         <div class="spinner horizontal"></div>
@@ -49,9 +61,18 @@
           <li>
             <a href={% url 'home' %}>Home</a>
           </li>
+          {% if request.user.is_authenticated %}
+          <li>
+            <a href="{% url 'logout' %}?next={{request.path}}">Logout ({{request.user.username}})</a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+          </li>
+          {% endif %}
           <li>
             {% comment %} Should be internal links {% url ... %} but difficulty setting it to admin since no view {% endcomment %}
-            <a href="/admin">Admin Login</a>
+            <a href="/admin">Admins</a>
           </li>
           {%if user.is_authenticated%}
           <li  >

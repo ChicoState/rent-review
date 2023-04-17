@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Create a Complex
+{% endblock title %}
+{% block head %}
+  <style>
+    #CitiesContent {
+        padding-top: 2%;
+        margin: 1%;
+        background-color: #5daaf3;
+    }
+
+    #rowgutter {
+        margin-right: 0px;
+    }
+
+    #fixed {
+        position: fixed;
+        top: 25px;
+        width: 100%;
+        z-index: 1;
+        background-color: white;
+    }
+  </style>
+{% endblock head %}
+{% block content %}
+  <div id="fixed">
+    <div class="container">
+      <div class="row justify-content-center"
+           id="rowgutter"
+           style="margin-top:50px">
+        <h1 style="text-align:center">Create a Complex</h1>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center"
+         style="margin-top:160px"
+         id="rowgutter">
+      <div class="col-6 justify-content-center d-inline-block overflow-scroll">
+        <form action={% url 'createComplex' %} method="post">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="fieldWrapper row justify-content-center"
+                 style="margin-top:10px"
+                 id="rowgutter">
+              {{ field.errors }}
+              <div class="col-2 ">{{ field.label_tag }}</div>
+              <div class="col-2 ">{{ field }}</div>
+              {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
+            </div>
+          {% endfor %}
+          <div class="fieldWrapper row justify-content-center"
+               style="margin-top:10px"
+               id="rowgutter">
+            <button type="submit" class="btn btn-primary">Add Your City!</button>
+          </div>
+        </form>
+      </div>  
+    </div>
+  </div>
+{% endblock content %}

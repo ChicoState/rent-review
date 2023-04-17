@@ -1,3 +1,7 @@
 Django>=4.0
 psycopg2>=2.8
+<<<<<<< HEAD
 Pillow>=3
+=======
+django-star-ratings
+>>>>>>> main
