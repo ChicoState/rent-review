@@ -94,7 +94,7 @@ add linear gradient to stars
         </div>
         <div class="col-4 ">
             {% if user.is_authenticated %}
-            <a href="addPost">            
+            <a href="addPost?next={{request.path}}">            
               <button id="addPostButton" class="btn small mb-0" >Add Review</button>
             </a>
             {% else %}
