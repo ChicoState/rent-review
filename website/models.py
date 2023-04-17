@@ -12,7 +12,7 @@ class Cities(models.Model):
     address = models.CharField(max_length=64)
     url = models.CharField(max_length=128)
     zipcode = models.IntegerField()
-    citis_images = models.ImageField(upload_to='images/')
+   
 ##
 # the upload_to takes care of the directory the image is being uploaded to
 # #
@@ -56,3 +56,10 @@ class Comments(models.Model):
 
     def __str__(self):
         return f"{self.post}"
+##code add
+class Image(models.Model):
+    title = models.CharField(max_length = 200)
+    image = models.ImageField(upload_to='images')
+    
+    def __str__(self):
+        return self.title

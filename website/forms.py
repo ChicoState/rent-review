@@ -1,15 +1,8 @@
 from django import forms
-<<<<<<< HEAD
-from website.models import Cities
-from django.core import validators
-from .models import *
-from django.contrib.auth.models import User
-=======
-from .models import Cities, Comments
+from .models import Cities, Comments, Image
 from django.core import validators
 from django.contrib.auth.models import User
 
->>>>>>> main
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True, label='',
@@ -20,33 +13,6 @@ class CityForm(forms.Form):
 
     class Meta:
         model = Cities
-<<<<<<< HEAD
-        # #
-        # here we add the fields here to make the image
-        # #
-        fields = ['name','hotel_Main_Img']
-######===============================================
-# AGGM
-# Created the form to add new users working
-# Using Dr Harrings class Notes for web
-######===============================================
-class JoinForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete':'newpassword'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'size':'30'}))
-    class Metal():
-        model = User
-        fields=('first_name','last_name','username','email','password')
-        help_texts={
-            'username':None
-        }
-###################################
-#Creating Login here
-#AGGM
-###################################
-class LoginForm(forms.Form):
-    username=forms.CharField()
-    password=forms.CharField(widget=forms.PasswordInput())
-=======
 
 
 class JoinForm(forms.ModelForm):
@@ -74,8 +40,6 @@ class CommentForm(forms.Form):
     class Meta:
         model = Comments
         
-
-
 class CreateComplexForm(forms.Form):
     cityname = forms.CharField(label='City', max_length=28)
     complexName = forms.CharField(label='Complex Name', max_length=64)
@@ -93,4 +57,9 @@ class CreateComplexForm(forms.Form):
         com.zipcode = self.cleaned_data["zipcode"]
         com.save()
         return com
->>>>>>> main
+    
+class imageForm(forms.ModelForm):
+        """Firm for iamge"""
+        class Meta:
+            model = Image
+            fields = ('title','image')
