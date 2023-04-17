@@ -37,7 +37,8 @@ Create a Review
 <div class="container" float="left">
     <div class="row justify-content-left" style="margin-top:30px" id="rowgutter">
         <div class="col-2 justify-content-center d-inline-block overflow-scroll">
-            <form method=“post”>
+            <!-- <form method=“post”> -->
+            <form method="post" id="RateForm">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{request.get_full_path}}"/>
                 <div class="container style="padding: 4em">

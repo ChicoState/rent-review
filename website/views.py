@@ -91,10 +91,7 @@ def postLookup(request, city_name, complex_id, post_id):
     return  render(request, "commentDisplay.html", context)
 
 def add_post(request, city_name, complex_id):
-    #form = RateForm()
-    #it might go to default route
     if (request.method == "POST"):
-        print("LLOOOLL")
         form = RateForm(request.POST)
         if form.is_valid():
             new_post = Posts(user_id = request.user.id,
@@ -115,30 +112,15 @@ def add_post(request, city_name, complex_id):
             url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
             if url_is_safe:
                 url = iri_to_uri(redirect_to)
-                redirect_url = str(city_name) + "/" + str(complex_id) + "/" + str(new_post.id)
-                return redirect(redirect_url)
+                return redirect(url)
             else:
-                redirect_url = str(city_name) + "/" + str(complex_id) + "/" + str(new_post.id)
-                return redirect(redirect_url)
+                return redirect("home")
     else:
         form = RateForm()
     context = {
         'form': form
         }
     return render(request, 'reviewDisplay.html', context=context)
-
-# def index(request) -> HttpResponse:
-#     posts = RateForm.objects.all()
-#     for post in posts:
-#         rating = RateForm.objects.filter(post=post, user=request.user).first()
-#         post.user_rating = rating.rating if rating else 0
-#     return render(request, "reviewDisplay.html", {"posts": posts})
-
-# def rate(request, post_id:int, rating:int) -> HttpResponse:
-#     post = RateForm.objects.get(id=post_id)
-#     RateForm.objects.filter(post=post, user=request.user).delete()
-#     post.rating_set.create(user=request.user, rating=rating)
-#     return index(request)
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")
