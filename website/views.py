@@ -190,15 +190,17 @@ def createComplex(request):
 
 
 def image_upload_view(request):
+
     if request.method == 'POST':
         form=imageForm(request.POST,request.FILES)
+        
         if form.is_valid():
             form.save()
-            imag_obj = form.instance
-            #return redirect('success')
-            return render(request, 'imageUpload.html',{'form':form,'imag_obj':imag_obj})
+            #imag_obj = form.instance
+            return redirect('success')
+            #return render(request, 'imageUpload.html',{'form':form,'imag_obj':imag_obj})
     else:
         form = imageForm()
-        return render(request, 'imageUpload.html',{'form':form})
-    def success(request):
-        return HttpResponse('successfully uploaded')
+    return render(request, 'imageUpload.html',{'form':form})
+def success(request):
+    return HttpResponse('successfully uploaded')

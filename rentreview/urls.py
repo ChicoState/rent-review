@@ -39,8 +39,9 @@ urlpatterns = [
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path("/createComplex/", website_view.createComplex, name="createComplex"),
     #path('/upload/', website_view.image_upload_view),
-    path('/image_upload/',website_view.image_upload_view, name="iamge-request"),
+    path('upload/',website_view.image_upload_view, name="image_upload"),
+    path('success', success, name='success'),
 
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-#if settings.DEBUG:
-#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]#+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

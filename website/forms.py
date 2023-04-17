@@ -58,9 +58,9 @@ class CreateComplexForm(forms.Form):
         com.zipcode = self.cleaned_data["zipcode"]
         com.save()
         return com
-    
+
 class imageForm(forms.ModelForm):
         """Firm for iamge"""
         class Meta:
-            model = Image
-            fields = '__all__'
+            model=Image
+            fields = ['title','image']
