@@ -24,6 +24,7 @@
     <h1>Login</h1>
     <div class="form-group">
       <form method="post">
+        {% csrf_token %}
         {% for field in form %}
           <div class="fieldWrapper row justify-content-center"
                style="margin-top:10px"
