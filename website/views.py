@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Cities, Posts, Comments, User
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm
+from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm, RateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
-
-# Create your views here.
 
 def home(request):
     if Cities.objects.all().count() == 0:
@@ -20,9 +18,9 @@ def home(request):
             if Cities.objects.filter(name__icontains=city_input).exists():
                 return redirect('city_lookup', city_name=city_input)
             else:
-                print("city does not excists")
+                print("City does not exist")
         else:
-            print("not valid")
+            print("Not Valid")
     cities = list(set(Cities.objects.values_list("name", flat=True)))
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
@@ -39,9 +37,6 @@ def cityLookup(request, city_name):
     # for i in range(len(cities)):
     #     print(cities[i].name, cities[i].complex_name)
     return render(request, "complexDisplay.html", context=context)
-
-
-
 
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
@@ -95,11 +90,37 @@ def postLookup(request, city_name, complex_id, post_id):
     context = {"city": city[0],"complex_likes":complex_likes, "post_data": post_data, "comment_list" : comment_list, "user": user, "post_description": post_description, "form" : CommentForm}
     return  render(request, "commentDisplay.html", context)
 
-
 def add_post(request, city_name, complex_id):
-    return redirect('home')
-
-
+    if (request.method == "POST"):
+        form = RateForm(request.POST)
+        if form.is_valid():
+            new_post = Posts(user_id = request.user.id,
+                             complex_id = complex_id,
+                             post_title = form.cleaned_data.get("post_title"),
+                             post_text = form.cleaned_data.get("post_text"),
+                             likes = form.cleaned_data.get("likes"),
+                             strictness = form.cleaned_data.get("strictness"),
+                             amennities = form.cleaned_data.get("amennities"),
+                             accessibility = form.cleaned_data.get("accessibility"),
+                             maintenence = form.cleaned_data.get("maintenence"),
+                             grace_period = form.cleaned_data.get("grace_period"),
+                             staff_friendlyness = form.cleaned_data.get("staff_friendlyness"),
+                             price = form.cleaned_data.get("price"))
+            new_post.save()
+            redirect_to = request.GET['next']
+            print(redirect_to)
+            url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
+            if url_is_safe:
+                url = iri_to_uri(redirect_to)
+                return redirect(url)
+            else:
+                return redirect("home")
+    else:
+        form = RateForm()
+    context = {
+        'form': form
+        }
+    return render(request, 'reviewDisplay.html', context=context)
 
 def init_testSet():
     print("SAVING INTO DATABASE\n")
@@ -114,9 +135,8 @@ def init_testSet():
             zipcode=row["zipcode"],
         )
         DBentry.save()
-
-    # Posts(user=User.objects.filter(username="admin"),complex=Cities.objects.filter(name__icontains="chico"), post_title="testing",post_text="test test test", likes=2, strictness=3,amennities=1,accessibility=0,maintenence=5,grace_period=4,staff_friendlyness=0,price=5).save()
-
+    
+    #Posts(user=User.objects.filter(username="admin"),complex=Cities.objects.filter(name__icontains="chico"), post_title="testing",post_text="test test test", likes=2, strictness=3,amennities=1,accessibility=0,maintenence=5,grace_period=4,staff_friendlyness=0,price=5).save()
 
 def join(request):
     if (request.method == "POST"):
