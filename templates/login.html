@@ -21,30 +21,34 @@
 {% endblock head %}
 {% block content %}
   <div class="container">
-    <h1>Login</h1>
-    <div class="form-group">
-      <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-          <div class="fieldWrapper row justify-content-center"
-               style="margin-top:10px"
-               id="rowgutter">
-            {{ field.errors }}
-            <div class="col-3" style="text-align:right">{{ field.label_tag }}</div>
-            <div class="col-3 ">{{ field }}</div>
-            {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
-          </div>
-        {% endfor %}
-        <div class="row-cols-4 fieldWrapper justify-content-center"
-             style="margin-top:10px;
-                    text-align:center">
-          <button type="submit" class="btn btn-primary">Login</button>
-          <a href={% url 'join' %}>
-            <button type="button" class="btn btn-primary">Register Here!</button>
-          </a>
+    <div class="row vh-nav">
+      <div class="row justify-content-center align-self-center">
+        <h1>Login</h1>
+        <div class="form-group">
+          <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+              <div class="fieldWrapper row justify-content-center"
+                   style="margin-top:10px"
+                   id="rowgutter">
+                {{ field.errors }}
+                <div class="col-3" style="text-align:right">{{ field.label_tag }}</div>
+                <div class="col-3 ">{{ field }}</div>
+                {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
+              </div>
+            {% endfor %}
+            <div class="row-cols-4 fieldWrapper justify-content-center"
+                 style="margin-top:10px;
+                        text-align:center">
+              <button type="submit" class="btn btn-primary">Login</button>
+              <a href={% url 'join' %}>
+                <button type="button" class="btn btn-primary">Register Here!</button>
+              </a>
+            </div>
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+          </form>
         </div>
-        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-      </form>
+      </div>
     </div>
   </div>
   {% comment %} <div id="fixed">
