@@ -18,7 +18,7 @@ class CityForm(forms.Form):
 class JoinForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'autocomplete': 'new-password'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}))
+    email = forms.CharField(widget=forms.TextInput())
 
     class Meta():
         model = User
