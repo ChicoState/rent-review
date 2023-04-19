@@ -55,22 +55,6 @@
             </div>
           </form>
         </div>
-        {% comment %} <div class="form-group">
-          <form action={% url 'login' %} method="post">
-            {% csrf_token %}
-            {% for field in join_form %}
-              <div class="fieldWrapper row justify-content-center" style="margin-top:10px" id="rowgutter">
-                {{ field.errors }}
-                <div class="col-1 col-form-label">{{ field.label_tag }}</div>
-                <div class="col-2">{{ field }}</div>
-                {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
-              </div>
-            {% endfor %}
-            <div class="row-cols-4 fieldWrapper row justify-content-center" style="margin-top:10px; text-align:center">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </form>
-        </div> {% endcomment %}
       </div>
     </div>
   </div>
