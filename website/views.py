@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
+import requests
 
 def home(request):
     if Cities.objects.all().count() == 0:
@@ -201,8 +202,15 @@ def createComplex(request):
         form = CreateComplexForm(request.POST)
         if form.is_valid():
             new_complex = form.save()
-            #lat,lng = 
-            return redirect("home")
+            full_address = str(new_complex.address) +", "+ str(new_complex.zipcode)
+            print(full_address)
+            lat,lng = extract_lat_long_via_address(full_address)
+            print(lat)
+            print(lng)
+            new_complex.lat = lat
+            new_complex.lng = lng
+            new_complex.save(update_fields=['lat','lng'])
+            return redirect("complexLookup", city_name=new_complex.name, complex_id=new_complex.pk)
     else:
         form = CreateComplexForm()
     context = {'form': form}
