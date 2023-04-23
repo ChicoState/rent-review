@@ -4,10 +4,11 @@ from django.core import validators
 from django.contrib.auth.models import User
 
 class CityForm(forms.Form):
-    city_input = forms.CharField(required=True, label='', widget=forms.widgets.Textarea(attrs=
-        {'style': 'width: 80%', 'style': 'height: 30px', 'id': 'searchBar', 'placeholder': 'City Name', }),
-    validators=[validators.MinLengthValidator(1)],
-    max_length=28)
+    city_input = forms.CharField(required=True, label='',
+                                 widget=forms.widgets.TextInput(
+                                     attrs={ 'style': 'height: 30px; text-align:center; border-radius:10px;', 'id': 'searchBar', 'placeholder': 'City Name', }),
+                                 validators=[validators.MinLengthValidator(1)],
+                                 max_length=28)
 
     class Meta:
         model = Cities
@@ -15,7 +16,7 @@ class CityForm(forms.Form):
 class JoinForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'autocomplete': 'new-password'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}))
+    email = forms.CharField(widget=forms.TextInput())
 
     class Meta():
         model = User
