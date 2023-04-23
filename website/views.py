@@ -34,10 +34,14 @@ def cityLookup(request, city_name):
     else:
         cities = list(Cities.objects.filter(
             name__icontains=city_name).order_by("complex_name"))
-    context = {"cities": cities}
-    # for i in range(len(cities)):
-    #     print(cities[i].name, cities[i].complex_name)
-    return render(request, "complexDisplay.html", context=context)
+        coordinates = []
+        for c in cities:
+            coordinates.append({c.lat,c.lng})
+        print(coordinates)
+        context = {"cities": cities, "coordinates":coordinates}
+        # for i in range(len(cities)):
+        #     print(cities[i].name, cities[i].complex_name)
+        return render(request, "complexDisplay.html", context=context)
 
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
