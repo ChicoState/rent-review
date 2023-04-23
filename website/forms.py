@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cities, Comments, Posts
+from .models import City,Complex, Comments, Posts
 from django.core import validators
 from django.contrib.auth.models import User
 
@@ -11,7 +11,7 @@ class CityForm(forms.Form):
                                  max_length=28)
 
     class Meta:
-        model = Cities
+        model = City
         
 class JoinForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(
@@ -56,8 +56,8 @@ class CreateComplexForm(forms.Form):
     zipcode = forms.IntegerField(max_value=99999, min_value=501)
 
     def save(self):
-        com = Cities()
-        com.name = self.cleaned_data["cityname"].capitalize()
+        com = Complex()
+        com.city_name = self.cleaned_data["cityname"].capitalize()
         com.complex_name = self.cleaned_data["complexName"].capitalize()
         com.address = self.cleaned_data["address"].capitalize()
         com.url = self.cleaned_data["url"]

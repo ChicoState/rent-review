@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Cities, Posts, Comments, User
+from .models import City, Posts, Comments, User, Complex
 from django.db.models import Avg
 from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm, RateForm
 from django.contrib.auth.decorators import login_required
@@ -10,19 +10,19 @@ from django.utils.encoding import iri_to_uri
 import requests
 
 def home(request):
-    if Cities.objects.all().count() == 0:
+    if Complex.objects.all().count() == 0:
         init_testSet()
     if request.method == "POST":
         form = CityForm(request.POST)
         if form.is_valid():
             city_input = form.cleaned_data.get("city_input")
-            if Cities.objects.filter(name__icontains=city_input).exists():
-                return redirect('city_lookup', city_name=city_input)
+            if Complex.objects.filter(city_name__icontains=city_input).exists():
+                return redirect('city_lookup', city_name=city_input.capitalize())
             else:
                 print("City does not exist")
         else:
             print("Not Valid")
-    cities = list(set(Cities.objects.values_list("name", flat=True)))
+    cities = list(set(City.objects.values_list("name", flat=True)))
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
 
@@ -32,13 +32,14 @@ def cityLookup(request, city_name):
     if city_name == "":
         return redirect('home')
     else:
-        cities = list(Cities.objects.filter(
-            name__icontains=city_name).order_by("complex_name"))
+        city_id = City.objects.filter(name = city_name).values_list('id', flat=True)
+        complexs = list(Complex.objects.filter(
+            city_name_id=city_id).order_by("complex_name"))
         coordinates = []
-        for c in cities:
+        for c in complexs:
             coordinates.append({c.lat,c.lng})
         print(coordinates)
-        context = {"cities": cities, "coordinates":coordinates}
+        context = {"cities": complexs, "coordinates":coordinates}
         # for i in range(len(cities)):
         #     print(cities[i].name, cities[i].complex_name)
         return render(request, "complexDisplay.html", context=context)
@@ -47,7 +48,7 @@ def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
         return redirect('home')
 
-    city = list(Cities.objects.filter(pk=complex_id))
+    city = list(Complex.objects.filter(pk=complex_id))
     print(city)
     post_list = list(Posts.objects.filter(complex__pk=complex_id).only(
         "user", "post_title", "likes", "id"))
@@ -82,7 +83,7 @@ def postLookup(request, city_name, complex_id, post_id):
         else:
             print("not valid comment")
 
-    city = list(Cities.objects.filter(pk=complex_id))
+    city = list(Complex.objects.filter(pk=complex_id))
     
     post_data = list(post_obj.values("strictness","amennities","accessibility","maintenence","grace_period","staff_friendlyness"))
     post_data = dict( sorted(post_data[0].items(), key=lambda x: x[0].lower()) )
@@ -131,17 +132,29 @@ def init_testSet():
     print("SAVING INTO DATABASE\n")
     from csv import DictReader
     #! If error on open check to see if path is correct.
-    for row in DictReader(open("static/misc/TempDatabaseEntries.csv")):
-        DBentry = Cities(
+    for row in DictReader(open("static/misc/us-cities-top-1k.csv")):
+        DBentry = City(
             name=row["City"],
-            complex_name=row["complex_name"],
-            address=row["address"],
-            url=row["url"],
-            zipcode=row["zipcode"],
+            lat=row["lat"],
+            lng=row["lon"],
+            state=row["State"],
+            
         )
         DBentry.save()
     
-    #Posts(user=User.objects.filter(username="admin"),complex=Cities.objects.filter(name__icontains="chico"), post_title="testing",post_text="test test test", likes=2, strictness=3,amennities=1,accessibility=0,maintenence=5,grace_period=4,staff_friendlyness=0,price=5).save()
+    for row in DictReader(open("static/misc/TempDatabaseEntries.csv")):
+        city_id = City.objects.filter(name = row["City"]).values_list('id', flat=True)
+        if City.objects.filter(name = row["City"]).exists():
+            print(city_id)
+            DBentry = Complex(
+                city_name_id=city_id,
+                complex_name=row["complex_name"],
+                address=row["address"],
+                url=row["url"],
+                zipcode=row["zipcode"],
+            )
+            DBentry.save()
+    
 
 def join(request):
     if (request.method == "POST"):

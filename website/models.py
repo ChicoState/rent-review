@@ -5,8 +5,16 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator
 # Create your models here.
 
-class Cities(models.Model):
+
+class City(models.Model):
     name = models.CharField(max_length=28)
+    state = models.CharField(max_length=12)
+    lat = models.FloatField(default=39.72974839382744)
+    lng = models.FloatField(default=-121.84780857997693)
+ 
+
+class Complex(models.Model):
+    city_name = models.ForeignKey(City, on_delete=models.CASCADE)
     complex_name = models.CharField(max_length=64)
     address = models.CharField(max_length=64)
     url = models.CharField(max_length=128)
@@ -22,7 +30,7 @@ class Posts(models.Model):
     # https://pypi.org/project/django-star-ratings/
     # example implementation for input forms https://medium.com/geekculture/django-implementing-star-rating-e1deff03bb1c
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    complex = models.ForeignKey(Cities, on_delete=models.CASCADE)
+    complex = models.ForeignKey(Complex, on_delete=models.CASCADE)
     post_title = models.CharField(max_length=128)
     post_text = models.CharField(max_length=1028)
     likes = models.IntegerField(default=0, validators=[MaxValueValidator(5)])
