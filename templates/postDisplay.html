@@ -90,11 +90,11 @@ add linear gradient to stars
         <div class="col-6">
           <div class="row">
           <div class="col-6" style="padding-right: 0%;">
-            <h1> Reviews: {{ comment_list|length }}</h1>
+            <h1> Reviews: {{ post_list|length }}</h1>
         </div>
         <div class="col-4 ">
             {% if user.is_authenticated %}
-            <a href="addPost">            
+            <a href="addPost?next={{request.path}}">            
               <button id="addPostButton" class="btn small mb-0" >Add Review</button>
             </a>
             {% else %}

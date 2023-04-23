@@ -5,59 +5,54 @@
 {% endblock title %}
 {% block head %}
   <style>
-    #CitiesContent {
-        padding-top: 2%;
-        margin: 1%;
-        background-color: #5daaf3;
-    }
-
-    #rowgutter {
-        margin-right: 0px;
-    }
-
-    #fixed {
-        position: fixed;
-        top: 25px;
-        width: 100%;
-        z-index: 1;
-        background-color: white;
+    h1 {
+        text-align: center;
     }
   </style>
 {% endblock head %}
 {% block content %}
-  <div id="fixed">
-    <div class="container">
-      <div class="row justify-content-center"
-           id="rowgutter"
-           style="margin-top:50px">
-        <h1 style="text-align:center">Create a Complex</h1>
-      </div>
-    </div>
-  </div>
   <div class="container">
-    <div class="row justify-content-center"
-         style="margin-top:160px"
-         id="rowgutter">
-      <div class="col-6 justify-content-center d-inline-block overflow-scroll">
-        <form action={% url 'createComplex' %} method="post">
-          {% csrf_token %}
-          {% for field in form %}
-            <div class="fieldWrapper row justify-content-center"
-                 style="margin-top:10px"
-                 id="rowgutter">
-              {{ field.errors }}
-              <div class="col-2 ">{{ field.label_tag }}</div>
-              <div class="col-2 ">{{ field }}</div>
-              {% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
+    <div class="row vh-nav">
+      <div class="row justify-content-center align-self-center">
+        <h1>Create a Complex</h1>
+        {% comment %} How to center the form? {% endcomment %}
+        <div class="col-auto">
+          <form class="form-horizontal" method="post">
+            {% csrf_token %}
+            <fieldset>
+              {% for field in form %}
+                {% if field.errors %}
+                  <div class="control-group error">
+                    <label class="control-label">{{ field.label }}</label>
+                    <div class="controls">
+                      {{ field }}
+                      <span class="help-inline">
+                        {% for error in field.errors %}{{ error }}{% endfor %}
+                      </span>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="control-group">
+                    <label class="control-label">{{ field.label }}</label>
+                    <div class="controls">
+                      {{ field }}
+                      {% if field.help_text %}
+                        <p class="help-inline">
+                          <small>{{ field.help_text }}</small>
+                        </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </fieldset>
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary mt-2" value="Login">Add Complex</button>
             </div>
-          {% endfor %}
-          <div class="fieldWrapper row justify-content-center"
-               style="margin-top:10px"
-               id="rowgutter">
-            <button type="submit" class="btn btn-primary">Add Your City!</button>
-          </div>
-        </form>
-      </div>  
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock content %}

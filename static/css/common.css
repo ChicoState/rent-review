@@ -1,0 +1,5 @@
+.vh-nav {
+    /* 56 is 40 for content and 8 for padding top and bottom (16 total) */
+    height: calc(100vh - 56px);
+
+}

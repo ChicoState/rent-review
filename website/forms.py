@@ -1,8 +1,7 @@
 from django import forms
-from .models import Cities, Comments
+from .models import Cities, Comments, Posts
 from django.core import validators
 from django.contrib.auth.models import User
-
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True, label='',
@@ -13,12 +12,11 @@ class CityForm(forms.Form):
 
     class Meta:
         model = Cities
-
-
+        
 class JoinForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'autocomplete': 'new-password'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'size': '30'}))
+    email = forms.CharField(widget=forms.TextInput())
 
     class Meta():
         model = User
@@ -26,7 +24,6 @@ class JoinForm(forms.ModelForm):
         help_texts = {
             'username': None
         }
-
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -39,8 +36,16 @@ class CommentForm(forms.Form):
         max_length=1028)
     class Meta:
         model = Comments
-        
 
+class RateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            if visible.field.widget.input_type == 'number':
+                visible.field.widget.input_type = 'hidden'
+    class Meta:
+        model = Posts
+        exclude = ['user', 'complex', 'date_created']
 
 class CreateComplexForm(forms.Form):
     cityname = forms.CharField(label='City', max_length=28)
