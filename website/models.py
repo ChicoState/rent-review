@@ -12,6 +12,8 @@ class Cities(models.Model):
     address = models.CharField(max_length=64)
     url = models.CharField(max_length=128)
     zipcode = models.IntegerField()
+    lat = models.FloatField(blank=True, default=39.72974839382744)
+    lng = models.FloatField(blank=True, default=-121.84780857997693)
 
     def __str__(self):
         return f"{self.name}, {self.complex_name}"
