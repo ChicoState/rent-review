@@ -1,50 +1,66 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-Login Page
+  Login Page
 {% endblock title %}
 {% block head %}
-<style>
-    #fixed {
-        position: absolute;
-        left: 50%; /* relative to nearest positioned ancestor or body element */
-        top: 50%; /*  relative to nearest positioned ancestor or body element */
-        transform: translate(-50%, -50%);
-
-        background-color: white;
-
+  <style>
+    input {
+        max-width: 100%;
     }
+
     h1 {
+        margin-top: 10px;
         text-align: center;
     }
   </style>
 {% endblock head %}
 {% block content %}
-<div id="fixed">
-<div class="container">
-    <div class="row">
-        <div class="col-12 justify-content-center">
-      <h1>Login</h1>
-      <form method="POST">{% csrf_token %}
-        <table>
-          <tr>
-              <td>{{ form.username.label_tag }}</td>
-              <td>{{ form.username }}</td>
-          </tr>
-          <tr>
-              <td>{{ form.password.label_tag }}</td>
-              <td>{{ form.password }}</td>
-          </tr>
-          <tr style="text-align: center;"><td>
-            <input type="submit" class="btn btn-primary" value = "Login"/>
-          </td>
-          <td>Click <a href={% url 'join' %}>here</a> to join.</td></tr>
-          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-        </table>
-      </form>
+  <div class="container">
+    <div class="row vh-nav">
+      <div class="row justify-content-center align-self-center">
+        <h1>Login</h1>
+        {% comment %} How to center the form? {% endcomment %}
+        <div class="col-auto">
+          <form class="form-horizontal" method="post">
+            {% csrf_token %}
+            <fieldset>
+              {% for field in form %}
+                {% if field.errors %}
+                  <div class="control-group error">
+                    <label class="control-label">{{ field.label }}</label>
+                    <div class="controls">
+                      {{ field }}
+                      <span class="help-inline">
+                        {% for error in field.errors %}{{ error }}{% endfor %}
+                      </span>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="control-group">
+                    <label class="control-label">{{ field.label }}</label>
+                    <div class="controls">
+                      {{ field }}
+                      {% if field.help_text %}
+                        <p class="help-inline">
+                          <small>{{ field.help_text }}</small>
+                        </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </fieldset>
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary mt-2" value="Login">Submit</button>
+              <a href={% url 'join' %}>
+                <button type="button" class="btn btn-primary mt-2">Register</button>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
-</div>
   </div>
 {% endblock content %}
-
