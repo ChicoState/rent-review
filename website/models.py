@@ -14,6 +14,10 @@ class Cities(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+class Complex(models.Model): 
+    def __str__(self):
+        return f"{self.name}"
 
 class Posts(models.Model):
     # Look into this?
