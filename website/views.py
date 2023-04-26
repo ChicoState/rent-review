@@ -8,6 +8,14 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
 import requests
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+import json
+
+dotenv_path = Path(os.path.dirname(__file__) + '/../.env')
+load_dotenv(dotenv_path=dotenv_path)
+
 
 def home(request):
     if Complex.objects.all().count() == 0:
@@ -16,7 +24,7 @@ def home(request):
         form = CityForm(request.POST)
         if form.is_valid():
             city_input = form.cleaned_data.get("city_input")
-            if Complex.objects.filter(city_name__icontains=city_input).exists():
+            if City.objects.filter(name__icontains=city_input).exists():
                 return redirect('city_lookup', city_name=city_input.capitalize())
             else:
                 print("City does not exist")
@@ -32,14 +40,17 @@ def cityLookup(request, city_name):
     if city_name == "":
         return redirect('home')
     else:
-        city_id = City.objects.filter(name = city_name).values_list('id', flat=True)
+        # print(city_name)
+        city_center = list(City.objects.filter(name = city_name).values_list("lat", "lng"))
+        city_center = [x for x in city_center[0]]
+        print(city_center)
         complexs = list(Complex.objects.filter(
-            city_name_id=city_id).order_by("complex_name"))
+            city_name__name__contains=city_name).order_by("complex_name"))
         coordinates = []
         for c in complexs:
-            coordinates.append({c.lat,c.lng})
-        print(coordinates)
-        context = {"cities": complexs, "coordinates":coordinates}
+            
+            coordinates.append(["%s" % c.complex_name,c.lat,c.lng])
+        context = {"cities": complexs,"city_center":city_center, "coordinates":coordinates, "googleApiKey": os.environ.get('GOOGLE_MAPS_API_KEY'),}
         # for i in range(len(cities)):
         #     print(cities[i].name, cities[i].complex_name)
         return render(request, "complexDisplay.html", context=context)
@@ -220,25 +231,22 @@ def createComplex(request):
         if form.is_valid():
             new_complex = form.save()
             full_address = str(new_complex.address) +", "+ str(new_complex.zipcode)
-            print(full_address)
             lat,lng = extract_lat_long_via_address(full_address)
-            print(lat)
-            print(lng)
             new_complex.lat = lat
             new_complex.lng = lng
             new_complex.save(update_fields=['lat','lng'])
-            return redirect("complexLookup", city_name=new_complex.name, complex_id=new_complex.pk)
+            return redirect("complexLookup", city_name=new_complex.city_name.name, complex_id=new_complex.pk)
     else:
         form = CreateComplexForm()
     context = {'form': form}
     return render(request, "createComplex.html", context=context)
 
 
-GOOGLE_API_KEY = 'AIzaSyDTFZkId5gqVD4NKLKZw-qZR3HJq_ZcSnM' 
+ 
 
 def extract_lat_long_via_address(address_or_zipcode):
     lat, lng = None, None
-    api_key = GOOGLE_API_KEY
+    api_key = os.environ.get('GOOGLE_GEOCODING_API_KEY')
     base_url = "https://maps.googleapis.com/maps/api/geocode/json"
     endpoint = f"{base_url}?address={address_or_zipcode}&key={api_key}"
     # see how our endpoint includes our API key? Yes this is yet another reason to restrict the key

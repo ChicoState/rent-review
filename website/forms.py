@@ -57,7 +57,8 @@ class CreateComplexForm(forms.Form):
 
     def save(self):
         com = Complex()
-        com.city_name = self.cleaned_data["cityname"].capitalize()
+        city = City.objects.get(name=self.cleaned_data["cityname"].capitalize())
+        com.city_name = city
         com.complex_name = self.cleaned_data["complexName"].capitalize()
         com.address = self.cleaned_data["address"].capitalize()
         com.url = self.cleaned_data["url"]

@@ -72,7 +72,7 @@
           </script>            {% comment %} Map {% endcomment %} -->
         
             <div id="map_canvas" style="height: 354px; width:713px;"></div>
-            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTFZkId5gqVD4NKLKZw-qZR3HJq_ZcSnM&callback=initMap"></script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ googleApiKey }}&callback=initMap"></script>
             <script>
             var directionsDisplay,
                 directionsService ;
@@ -80,10 +80,71 @@
             function initMap() {
               var directionsService = new google.maps.DirectionsService();
               directionsDisplay = new google.maps.DirectionsRenderer();
-              var chicago = new google.maps.LatLng(41.850033, -87.6500523);
-              var mapOptions = { zoom:8, mapTypeId: google.maps.MapTypeId.ROADMAP, center: chicago }
+              var city_center = new google.maps.LatLng({{city_center.0}}, {{city_center.1}});
+              var mapOptions = { zoom:13, mapTypeId: google.maps.MapTypeId.ROADMAP, center: city_center }
+              
               map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+      
               directionsDisplay.setMap(map);
+              
+              //var locations = {{coordinates}};
+              // var i;
+              // for(i=0; i<locations.length; i++){
+              //   locations[i][0].replace(new RegExp("&"+"#"+"x27;", "g"), "")
+              // }
+
+              // console.log(locations)
+
+
+              // var infowindow = new google.maps.InfoWindow;
+
+              
+              // var markers = new Array();
+              // for (i = 0; i < locations.length; i++) {  
+              //     marker.push(new google.maps.Marker({
+              //         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+              //         map: map
+              //     }));
+
+                  // google.maps.event.addListener(marker[i], 'click', (function(marker[i], i) {
+                  //     return function() {
+                  //         infowindow.setContent(locations[i][0]);
+                  //         infowindow.open(map, marker[i]);
+                  //     }
+                  // })(marker[i], i));
+              // }
+
+
+              
+              // var bounds = new google.maps.LatLngBounds();
+              // for(i=0;i<markers.length;i++) {
+              //   bounds.extend(markers[i].getPosition());
+              // }
+
+              // //center the map to a specific spot (city)
+              // map.setCenter(center); 
+
+              // //center the map to the geometric center of all markers
+              // map.setCenter(bounds.getCenter());
+
+              // map.fitBounds(bounds);
+
+              // //remove one zoom level to ensure no marker is on the edge.
+              // map.setZoom(map.getZoom()-1); 
+
+              // // set a minimum zoom 
+              // // if you got only 1 marker or all markers are on the same address map will be zoomed too much.
+              // if(map.getZoom()> 15){
+              //   map.setZoom(15);
+              // }
+
+              // //Alternatively this code can be used to set the zoom for just 1 marker and to skip redrawing.
+              // //Note that this will not cover the case if you have 2 markers on the same address.
+              // if(count(markers) == 1){
+              //     map.setMaxZoom(15);
+              //     map.fitBounds(bounds);
+              //     map.setMaxZoom(Null)
+              // }
             }
 
             </script>

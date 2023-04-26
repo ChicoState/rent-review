@@ -23,7 +23,7 @@ class Complex(models.Model):
     lng = models.FloatField(default=-121.84780857997693)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.city_name.name}"
 
 class Posts(models.Model):
     # Look into this?
