@@ -130,7 +130,7 @@ STATICFILES_DIRS = [ STATIC_DIR ]
 
 #MEDIA FALLOW TUTRIORAL
 #allowing access to the images in the url
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 #This is used for the media URL to access by the http,
 #allowing users to check their uploaded images
