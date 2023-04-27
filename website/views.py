@@ -13,11 +13,16 @@ from dotenv import load_dotenv
 from pathlib import Path
 import json
 
-dotenv_path = Path(os.path.dirname(__file__) + '/../.env')
-load_dotenv(dotenv_path=dotenv_path)
+init = False
+
+if not init:
+    dotenv_path = Path(os.path.dirname(__file__) + '/../.env')
+    load_dotenv(dotenv_path=dotenv_path)
+    init = True
 
 
 def home(request):
+    
     if Complex.objects.all().count() == 0:
         init_testSet()
     if request.method == "POST":
@@ -40,9 +45,16 @@ def cityLookup(request, city_name):
     if city_name == "":
         return redirect('home')
     else:
-        # print(city_name)
-        city_center = list(City.objects.filter(name = city_name).values_list("lat", "lng"))
-        city_center = [x for x in city_center[0]]
+        if City.objects.filter(name=city_name).exists():
+            city_lat = list(City.objects.filter(name=city_name).values_list("lat", flat=True))
+            city_lng = list(City.objects.filter(name=city_name).values_list("lng", flat=True))
+            print(city_lat)
+            print(city_name)
+            print(city_lng)
+
+            city_center = [city_lat[0],city_lng[0]]
+        else:
+            city_center = [0,0]
         print(city_center)
         complexs = list(Complex.objects.filter(
             city_name__name__contains=city_name).order_by("complex_name"))
