@@ -112,6 +112,7 @@ function initMap() {
 
               
   var markers = new Array();
+  if(locations.length > 0){ 
   for (i = 0; i < locations.length; i++) {  
     var latlng = new google.maps.LatLng(locations[i][1], locations[i][2])
     var marker =  new google.maps.Marker({
@@ -177,6 +178,7 @@ function initMap() {
        map.fitBounds(bounds);
        map.setMaxZoom(Null)
    }
+  }
  }
 
             </script>
