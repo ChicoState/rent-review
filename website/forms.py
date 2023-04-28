@@ -1,5 +1,5 @@
 from django import forms
-from .models import * #Cities, Comments, Hotel
+from .models import *#Cities, Comments, Hotel
 from django.core import validators
 from django.contrib.auth.models import User
 from django.db import models

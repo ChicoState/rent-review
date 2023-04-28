@@ -58,7 +58,7 @@
             <a href={% url 'home' %}>Home</a>
           </li>
           <li>
-            <a href={% url 'image_upload' %}>image upload</a>
+            <a href="{% url 'image_upload' %}">image upload</a>
           </li>
           {% if request.user.is_authenticated %}
           <li>
