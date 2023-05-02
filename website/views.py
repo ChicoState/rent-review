@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import City, Posts, Comments, User, Complex
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm, RateForm
+from .forms import CityForm, LoginForm, NewUserForm, CreateComplexForm, CommentForm, RateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
+from django.contrib import messages
 import requests
 import os
 from dotenv import load_dotenv
@@ -180,21 +181,23 @@ def init_testSet():
     
 
 def join(request):
+    print("in join request")
     if (request.method == "POST"):
-        join_form = JoinForm(request.POST)
-        if (join_form.is_valid()):
-            user = join_form.save()
-            user.set_password(user.password)
-            user.save()
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            print("join form is valid")
+            user = form.save()
+            print(user)
+            login(request, user)
+            messages.success(request, "Registration successful." )
             return redirect("home")
-        else:
-            return render(request, "join.html", {"join_form": join_form})
-    else:
-        return render(request, "join.html", {"join_form": JoinForm})
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render (request=request, template_name="join.html", context={"join_form":form})
 
 
 def user_login(request):
-    # print("in login function")
+    print("in login function")
     if (request.method == 'POST'):
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -206,7 +209,7 @@ def user_login(request):
                 if user.is_active:
                     login(request, user)
                     print("user loggedin")
-                    redirect_to = request.GET['next']
+                    redirect_to = request.POST['next']
                     print(redirect_to)
                     url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
                     if url_is_safe:
@@ -215,7 +218,7 @@ def user_login(request):
                     return redirect('home')
                 else:
                     print("user not active")
-                    return HttpResponse("Your account is not active.")
+                    return redirect('home')
             else:
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(username,password))

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block title %}
   Join Page
 {% endblock title %}
+
 {% block head %}
   <style>
-    input {
-        max-width: %;
-    }
+    
 
     h1 {
         text-align: center;
@@ -20,40 +20,14 @@
       <div class="row justify-content-center align-self-center">
         <h1>Join</h1>
         <div class="col-auto">
-          <form action="{% url 'login' %}" class="form-horizontal" method="post">
+          <form class="form-horizontal" method="post">
             {% csrf_token %}
-            <fieldset>
-              {% for field in join_form %}
-                {% if field.errors %}
-                  <div class="control-group error">
-                    <label class="control-label">{{ field.label }}</label>
-                    <div class="controls">
-                      {{ field }}
-                      <span class="help-inline">
-                        {% for error in field.errors %}{{ error }}{% endfor %}
-                      </span>
-                    </div>
-                  </div>
-                {% else %}
-                  <div class="control-group">
-                    <label class="control-label">{{ field.label }}</label>
-                    <div class="controls">
-                      {{ field }}
-                      {% if field.help_text %}
-                        <p class="help-inline">
-                          <small>{{ field.help_text }}</small>
-                        </p>
-                      {% endif %}
-                    </div>
-                  </div>
-                {% endif %}
-              {% endfor %}
-              
-            </fieldset>
+            {{ join_form|crispy }}
             <div class="form-actions">
               <button type="submit" class="btn btn-primary mt-2">Submit</button>
             </div>
           </form>
+          <p class="text-center">If you already have an account, <a href="{% url 'login' %}?next=/">login</a> instead.</p>
         </div>
       </div>
     </div>
