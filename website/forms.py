@@ -1,5 +1,5 @@
 from django import forms
-from .models import City,Complex, Comments, Posts
+from .models import City,Complex, Comments, Posts, State
 from django.core import validators
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -61,20 +61,32 @@ class CreateComplexForm(forms.Form):
     complexName = forms.CharField(label='Complex Name', max_length=64)
     url = forms.URLField()
     address = forms.CharField(label='Address', max_length=64)
-    state = forms.ModelChoiceField(queryset=City.objects.all().values_list('state',flat=True).order_by('state').distinct(),
+    state = forms.ModelChoiceField(queryset=State.objects.all().order_by('name'),
                        widget= forms.Select(attrs={'class': 'form-control input'}),)
     
-    city = forms.ModelChoiceField(queryset=City.objects.all().values_list('name',flat=True).order_by('name'),
+    city = forms.ModelChoiceField(queryset=City.objects.all().order_by('name'),
                        widget= forms.Select(attrs={'class': 'form-control input'}),)
     zipcode = forms.IntegerField(max_value=99999, min_value=501)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['city'].queryset = City.objects.none()
+        super(CreateComplexForm,self).__init__(*args, **kwargs)
+        #self.fields['city'].queryset = City.objects.none()
+
+        if 'state' in self.data:
+            try:
+                state = self.data.get('state')
+                print(state)
+                self.fields['city'].queryset = City.objects.filter(state__pk=state).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        # elif self.instance.pk:
+        #     self.fields['city'].queryset = City.objects.all().order_by('name')
 
     def save(self):
         com = Complex()
-        city = City.objects.get(name=self.cleaned_data["cityname"].capitalize())
+        print(self.cleaned_data["city"])
+        city_name = self.cleaned_data["city"]
+        city = City.objects.get(name=city_name)
         com.city_name = city
         com.complex_name = self.cleaned_data["complexName"].capitalize()
         com.address = self.cleaned_data["address"].capitalize()
