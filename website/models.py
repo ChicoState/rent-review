@@ -5,22 +5,40 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.validators import MaxValueValidator
 # Create your models here.
 
-class Cities(models.Model):
+
+class State(models.Model):
+    name = models.CharField(max_length=12)
+    def __str__(self):
+        return f"{self.name}"
+
+
+class City(models.Model):
     name = models.CharField(max_length=28)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    lat = models.FloatField(default=39.72974839382744)
+    lng = models.FloatField(default=-121.84780857997693)
+    def __str__(self):
+        return f"{self.name}"
+ 
+
+class Complex(models.Model):
+    city_name = models.ForeignKey(City, on_delete=models.CASCADE)
     complex_name = models.CharField(max_length=64)
     address = models.CharField(max_length=64)
     url = models.CharField(max_length=128)
     zipcode = models.IntegerField()
+    lat = models.FloatField(default=39.72974839382744)
+    lng = models.FloatField(default=-121.84780857997693)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.city_name.name}"
 
 class Posts(models.Model):
     # Look into this?
     # https://pypi.org/project/django-star-ratings/
     # example implementation for input forms https://medium.com/geekculture/django-implementing-star-rating-e1deff03bb1c
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    complex = models.ForeignKey(Cities, on_delete=models.CASCADE)
+    complex = models.ForeignKey(Complex, on_delete=models.CASCADE)
     post_title = models.CharField(max_length=128)
     post_text = models.CharField(max_length=1028)
     likes = models.IntegerField(default=0, validators=[MaxValueValidator(5)])

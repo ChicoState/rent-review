@@ -1,27 +1,43 @@
 from django.shortcuts import render, redirect
-from .models import Cities, Posts, Comments, User
+from .models import City, Posts, Comments, User, Complex, State
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm, RateForm
+from .forms import CityForm, LoginForm, NewUserForm, CreateComplexForm, CommentForm, RateForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
+from django.contrib import messages
+import requests
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+import json
+
+init = False
+
+if not init:
+    dotenv_path = Path(os.path.dirname(__file__) + '/../.env')
+    load_dotenv(dotenv_path=dotenv_path)
+    init = True
+
 
 def home(request):
-    if Cities.objects.all().count() == 0:
+    
+    if Complex.objects.all().count() == 0:
         init_testSet()
     if request.method == "POST":
         form = CityForm(request.POST)
         if form.is_valid():
             city_input = form.cleaned_data.get("city_input")
-            if Cities.objects.filter(name__icontains=city_input).exists():
-                return redirect('city_lookup', city_name=city_input)
+            if City.objects.filter(name__icontains=city_input).exists():
+                return redirect('city_lookup', city_name=city_input.capitalize())
             else:
                 print("City does not exist")
         else:
             print("Not Valid")
-    cities = list(set(Cities.objects.values_list("name", flat=True)))
+    cities = list(set(City.objects.values_list("name", flat=True)))
     form = CityForm()
     return render(request, "home.html", {"cities": cities, "form": form})
 
@@ -31,18 +47,35 @@ def cityLookup(request, city_name):
     if city_name == "":
         return redirect('home')
     else:
-        cities = list(Cities.objects.filter(
-            name__icontains=city_name).order_by("complex_name"))
-    context = {"cities": cities}
-    # for i in range(len(cities)):
-    #     print(cities[i].name, cities[i].complex_name)
-    return render(request, "complexDisplay.html", context=context)
+        if City.objects.filter(name=city_name).exists():
+            city_lat = list(City.objects.filter(name=city_name).values_list("lat", flat=True))
+            city_lng = list(City.objects.filter(name=city_name).values_list("lng", flat=True))
+            print(city_lat)
+            print(city_name)
+            print(city_lng)
+
+            city_center = [city_lat[0],city_lng[0]]
+        else:
+            city_center = [0,0]
+        print(city_center)
+        complexs = list(Complex.objects.filter(
+            city_name__name__contains=city_name).order_by("complex_name"))
+        coordinates = []
+        for c in complexs:
+            
+            coordinates.append(["%s" % c.complex_name,c.lat,c.lng])
+        json_coordinates = json.dumps(coordinates)
+        print(json_coordinates)
+        context = {"cities": complexs,"city_center":city_center, "coordinates":json_coordinates, "googleApiKey": os.environ.get('GOOGLE_MAPS_API_KEY'),}
+        # for i in range(len(cities)):
+        #     print(cities[i].name, cities[i].complex_name)
+        return render(request, "complexDisplay.html", context=context)
 
 def complexLookup(request, city_name, complex_id):
     if city_name == "" or not complex_id:
         return redirect('home')
 
-    city = list(Cities.objects.filter(pk=complex_id))
+    city = list(Complex.objects.filter(pk=complex_id))
     print(city)
     post_list = list(Posts.objects.filter(complex__pk=complex_id).only(
         "user", "post_title", "likes", "id"))
@@ -77,7 +110,7 @@ def postLookup(request, city_name, complex_id, post_id):
         else:
             print("not valid comment")
 
-    city = list(Cities.objects.filter(pk=complex_id))
+    city = list(Complex.objects.filter(pk=complex_id))
     
     post_data = list(post_obj.values("strictness","amennities","accessibility","maintenence","grace_period","staff_friendlyness"))
     post_data = dict( sorted(post_data[0].items(), key=lambda x: x[0].lower()) )
@@ -126,46 +159,72 @@ def init_testSet():
     print("SAVING INTO DATABASE\n")
     from csv import DictReader
     #! If error on open check to see if path is correct.
-    for row in DictReader(open("static/misc/TempDatabaseEntries.csv")):
-        DBentry = Cities(
+    for row in DictReader(open("static/misc/us-cities-top-1k.csv")):
+
+        if not State.objects.filter(name=row["State"]).exists():
+            DBentry = DBentry = State(
+                name=row["State"],
+            )
+            DBentry.save()
+        
+        state_id = State.objects.filter(name = row["State"]).values_list('id', flat=True)
+        
+
+        DBentry = City(
             name=row["City"],
-            complex_name=row["complex_name"],
-            address=row["address"],
-            url=row["url"],
-            zipcode=row["zipcode"],
+            lat=row["lat"],
+            lng=row["lon"],
+            state_id=state_id,
+            
         )
         DBentry.save()
     
-    #Posts(user=User.objects.filter(username="admin"),complex=Cities.objects.filter(name__icontains="chico"), post_title="testing",post_text="test test test", likes=2, strictness=3,amennities=1,accessibility=0,maintenence=5,grace_period=4,staff_friendlyness=0,price=5).save()
+    for row in DictReader(open("static/misc/TempDatabaseEntries.csv")):
+        
+        if City.objects.filter(name = row["City"]).exists():
+            city_id = City.objects.filter(name = row["City"]).values_list('id', flat=True)
+            print(city_id)
+            DBentry = Complex(
+                city_name_id=city_id,
+                complex_name=row["complex_name"],
+                address=row["address"],
+                url=row["url"],
+                zipcode=row["zipcode"],
+            )
+            DBentry.save()
+            update_latlng(DBentry)
+    
 
 def join(request):
+    print("in join request")
     if (request.method == "POST"):
-        join_form = JoinForm(request.POST)
-        if (join_form.is_valid()):
-            user = join_form.save()
-            user.set_password(user.password)
-            user.save()
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            print("join form is valid")
+            user = form.save()
+            print(user)
+            login(request, user)
+            messages.success(request, "Registration successful." )
             return redirect("home")
-        else:
-            return render(request, "join.html", {"join_form": join_form})
-    else:
-        return render(request, "join.html", {"join_form": JoinForm})
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render (request=request, template_name="join.html", context={"join_form":form})
 
 
 def user_login(request):
-    # print("in login function")
+    print("in login function")
     if (request.method == 'POST'):
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             print("form is valid")
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
-            if user:
+            if user is not None:
                 if user.is_active:
                     login(request, user)
                     print("user loggedin")
-                    redirect_to = request.GET['next']
+                    redirect_to = request.POST['next']
                     print(redirect_to)
                     url_is_safe = url_has_allowed_host_and_scheme(redirect_to, None)
                     if url_is_safe:
@@ -174,7 +233,7 @@ def user_login(request):
                     return redirect('home')
                 else:
                     print("user not active")
-                    return HttpResponse("Your account is not active.")
+                    return redirect('home')
             else:
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(username,password))
@@ -200,9 +259,50 @@ def createComplex(request):
     if request.method == "POST":
         form = CreateComplexForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("home")
+            new_complex = form.save()
+            update_latlng(new_complex)
+            return redirect("complexLookup", city_name=new_complex.city_name.name, complex_id=new_complex.pk)
+        else:
+            print("form invalid")
+            print(form.errors)
     else:
         form = CreateComplexForm()
     context = {'form': form}
     return render(request, "createComplex.html", context=context)
+
+def update_latlng(complex):
+    full_address = str(complex.address) +", "+ str(complex.zipcode)
+    lat,lng = extract_lat_long_via_address(full_address)
+    complex.lat = lat
+    complex.lng = lng
+    complex.save(update_fields=['lat','lng'])
+ 
+
+def extract_lat_long_via_address(address_or_zipcode):
+    lat, lng = None, None
+    api_key = os.environ.get('GOOGLE_GEOCODING_API_KEY')
+    base_url = "https://maps.googleapis.com/maps/api/geocode/json"
+    endpoint = f"{base_url}?address={address_or_zipcode}&key={api_key}"
+    # see how our endpoint includes our API key? Yes this is yet another reason to restrict the key
+    r = requests.get(endpoint)
+    if r.status_code not in range(200, 299):
+        return None, None
+    try:
+        '''
+        This try block incase any of our inputs are invalid. This is done instead
+        of actually writing out handlers for all kinds of responses.
+        '''
+        results = r.json()['results'][0]
+        lat = results['geometry']['location']['lat']
+        lng = results['geometry']['location']['lng']
+    except:
+        pass
+    return lat, lng
+
+
+def load_cities(request):
+    state_id = request.GET.get('state')
+
+    #state_id = State.objects.filter(name = state_name).values_list('id', flat=True)
+    cities = list(City.objects.filter(state__pk=state_id).order_by('name'))
+    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
