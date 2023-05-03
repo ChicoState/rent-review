@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Cities, Posts, Comments, User
+from .models import * #Cities, Posts, Comments, User,Image_model
 from django.db.models import Avg
-from .forms import CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm
+from .forms import * #ImageForm,CityForm, LoginForm, JoinForm, CreateComplexForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -186,3 +186,34 @@ def createComplex(request):
         form = CreateComplexForm()
     context = {'form': form}
     return render(request, "createComplex.html", context=context)
+
+
+def hotel_image_view(request):
+
+	if request.method == 'POST':
+		form = HotelForm(request.POST, request.FILES)
+
+		if form.is_valid():
+			form.save()
+			return redirect('success')
+	else:
+		form = HotelForm()
+	return render(request, 'hotel_image_form.html', {'form': form})
+
+
+def success(request):
+	return HttpResponse('successfully uploaded')
+
+
+
+# Python program to view
+# for displaying images
+
+
+def display_hotel_images(request):
+
+	if request.method == 'GET':
+
+		# getting all the objects of hotel.
+		Hotels = Hotel.objects.all()
+		return render(request, 'display_hotel_images.html',{'hotel_images': Hotels})

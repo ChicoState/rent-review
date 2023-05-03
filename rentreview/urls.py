@@ -18,16 +18,18 @@ from django.urls import path, include
 #from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
+from django.conf.urls.static import static 
+from django.conf import settings
 
 from website import views as website_view
-
+from website.views import  *
 urlpatterns = [
     path("admin/", admin.site.urls, name="adminPage"),
     path('', website_view.home, name="home"),
-    path('<city_name>/', website_view.cityLookup,  name='city_lookup'),
+    path('cit_lookup+<city_name>/', website_view.cityLookup,  name='city_lookup'),
     path('<city_name>/<complex_id>/', website_view.complexLookup,  name='complexLookup'),
-    path('<city_name>/<complex_id>/addPost', website_view.add_post,  name='add_post'),
-    path('<city_name>/<complex_id>/<post_id>', website_view.postLookup,  name='postLookup'),
+    path('addpost/<city_name>/<complex_id>/addPost', website_view.add_post,  name='add_post'),
+    path('post/<city_name>/<complex_id>/<post_id>', website_view.postLookup,  name='postLookup'),
     path('/join/', website_view.join, name='join'),
     path('/login/', website_view.user_login, name='login'),
     path('/logout/', website_view.user_logout, name='logout'),
@@ -35,4 +37,14 @@ urlpatterns = [
     #path('/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path("/createComplex/", website_view.createComplex, name="createComplex"),
-]
+    
+    path('image_upload/<complex_id>/', website_view.display_hotel_images,  name='image_upload'),
+    path('display_hotel_images/<complex_id>/', website_view.display_hotel_images,  name='display_hotel_images'),
+
+    path('image_upload/', website_view.hotel_image_view, name='image_upload'),
+    path('success/', website_view.success, name='success'),
+    path('hotel_images/', website_view.display_hotel_images), #name = 'hotel_images'),
+
+
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#^^auto adds the images and makes seperate paths for them

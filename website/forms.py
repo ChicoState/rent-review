@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cities, Comments
+from .models import Hotel,Cities, Comments
 from django.core import validators
 from django.contrib.auth.models import User
 
@@ -59,3 +59,9 @@ class CreateComplexForm(forms.Form):
         com.zipcode = self.cleaned_data["zipcode"]
         com.save()
         return com
+
+class HotelForm(forms.ModelForm):
+
+	class Meta:
+		model = Hotel
+		fields = ['name', 'hotel_Main_Img']
