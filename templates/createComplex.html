@@ -8,6 +8,18 @@
     h1 {
         text-align: center;
     }
+    
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+  
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    
+    
   </style>
 {% endblock head %}
 {% block content %}
@@ -17,7 +29,7 @@
         <h1>Create a Complex</h1>
         {% comment %} How to center the form? {% endcomment %}
         <div class="col-auto">
-          <form class="form-horizontal" method="post">
+          <form class="form-horizontal" id="complexForm" method="post" data-cities-url="{% url 'ajax_load_cities' %}">
             {% csrf_token %}
             <fieldset>
               {% for field in form %}
@@ -51,6 +63,27 @@
               <button type="submit" class="btn btn-primary mt-2" value="Login">Add Complex</button>
             </div>
           </form>
+
+          <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+          <script>
+            $("#id_state").change(function () {
+              var url = $("#complexForm").attr("data-cities-url");  // get the url of the `load_cities` view
+              var country = $(this).val();  // get the selected country ID from the HTML input
+        
+              $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                  'state': country       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                  $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+              });
+        
+            });
+          </script>
+
+
         </div>
       </div>
     </div>

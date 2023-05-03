@@ -57,12 +57,20 @@ class RateForm(forms.ModelForm):
         exclude = ['user', 'complex', 'date_created']
 
 class CreateComplexForm(forms.Form):
-    cityname = forms.CharField(label='City', max_length=28)
+    
     complexName = forms.CharField(label='Complex Name', max_length=64)
-    address = forms.CharField(label='Address', max_length=64)
     url = forms.URLField()
-    # IRS has lowest zip at 00501
+    address = forms.CharField(label='Address', max_length=64)
+    state = forms.ModelChoiceField(queryset=City.objects.all().values_list('state',flat=True).order_by('state').distinct(),
+                       widget= forms.Select(attrs={'class': 'form-control input'}),)
+    
+    city = forms.ModelChoiceField(queryset=City.objects.all().values_list('name',flat=True).order_by('name'),
+                       widget= forms.Select(attrs={'class': 'form-control input'}),)
     zipcode = forms.IntegerField(max_value=99999, min_value=501)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['city'].queryset = City.objects.none()
 
     def save(self):
         com = Complex()

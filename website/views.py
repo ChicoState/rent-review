@@ -280,3 +280,9 @@ def extract_lat_long_via_address(address_or_zipcode):
     except:
         pass
     return lat, lng
+
+
+def load_cities(request):
+    state = request.GET.get('state')
+    cities = list(City.objects.filter(state=state).values_list('name',flat=True).order_by('name'))
+    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
