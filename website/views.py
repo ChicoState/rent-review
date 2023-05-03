@@ -64,7 +64,9 @@ def cityLookup(request, city_name):
         for c in complexs:
             
             coordinates.append(["%s" % c.complex_name,c.lat,c.lng])
-        context = {"cities": complexs,"city_center":city_center, "coordinates":coordinates, "googleApiKey": os.environ.get('GOOGLE_MAPS_API_KEY'),}
+        json_coordinates = json.dumps(coordinates)
+        print(json_coordinates)
+        context = {"cities": complexs,"city_center":city_center, "coordinates":json_coordinates, "googleApiKey": os.environ.get('GOOGLE_MAPS_API_KEY'),}
         # for i in range(len(cities)):
         #     print(cities[i].name, cities[i].complex_name)
         return render(request, "complexDisplay.html", context=context)
@@ -190,6 +192,7 @@ def init_testSet():
                 zipcode=row["zipcode"],
             )
             DBentry.save()
+            update_latlng(DBentry)
     
 
 def join(request):
@@ -257,11 +260,7 @@ def createComplex(request):
         form = CreateComplexForm(request.POST)
         if form.is_valid():
             new_complex = form.save()
-            full_address = str(new_complex.address) +", "+ str(new_complex.zipcode)
-            lat,lng = extract_lat_long_via_address(full_address)
-            new_complex.lat = lat
-            new_complex.lng = lng
-            new_complex.save(update_fields=['lat','lng'])
+            update_latlng(new_complex)
             return redirect("complexLookup", city_name=new_complex.city_name.name, complex_id=new_complex.pk)
         else:
             print("form invalid")
@@ -271,7 +270,12 @@ def createComplex(request):
     context = {'form': form}
     return render(request, "createComplex.html", context=context)
 
-
+def update_latlng(complex):
+    full_address = str(complex.address) +", "+ str(complex.zipcode)
+    lat,lng = extract_lat_long_via_address(full_address)
+    complex.lat = lat
+    complex.lng = lng
+    complex.save(update_fields=['lat','lng'])
  
 
 def extract_lat_long_via_address(address_or_zipcode):

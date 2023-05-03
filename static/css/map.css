@@ -1,4 +1,13 @@
-#map {
-    height: 100%;
-    width: 100%;
-  }
+
+
+#map_canvas_container {
+  position: relative;
+  height: 75vh;
+  width: 64vw;
+}
+
+#map_canvas {
+  position: absolute; 
+  height: 75vh;
+  width: 64vw;
+}
