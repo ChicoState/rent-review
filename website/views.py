@@ -14,6 +14,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 import json
+import string
 
 init = False
 
@@ -32,7 +33,7 @@ def home(request):
         if form.is_valid():
             city_input = form.cleaned_data.get("city_input")
             if City.objects.filter(name__icontains=city_input).exists():
-                return redirect('city_lookup', city_name=city_input.capitalize())
+                return redirect('city_lookup', city_name=string.capwords(city_input))
             else:
                 print("City does not exist")
         else:
