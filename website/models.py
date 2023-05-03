@@ -6,11 +6,19 @@ from django.core.validators import MaxValueValidator
 # Create your models here.
 
 
+class State(models.Model):
+    name = models.CharField(max_length=12)
+    def __str__(self):
+        return f"{self.name}"
+
+
 class City(models.Model):
     name = models.CharField(max_length=28)
-    state = models.CharField(max_length=12)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
     lat = models.FloatField(default=39.72974839382744)
     lng = models.FloatField(default=-121.84780857997693)
+    def __str__(self):
+        return f"{self.name}"
  
 
 class Complex(models.Model):

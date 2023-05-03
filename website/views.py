@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import City, Posts, Comments, User, Complex
+from .models import City, Posts, Comments, User, Complex, State
 from django.db.models import Avg
 from .forms import CityForm, LoginForm, NewUserForm, CreateComplexForm, CommentForm, RateForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -158,18 +158,29 @@ def init_testSet():
     from csv import DictReader
     #! If error on open check to see if path is correct.
     for row in DictReader(open("static/misc/us-cities-top-1k.csv")):
+
+        if not State.objects.filter(name=row["State"]).exists():
+            DBentry = DBentry = State(
+                name=row["State"],
+            )
+            DBentry.save()
+        
+        state_id = State.objects.filter(name = row["State"]).values_list('id', flat=True)
+        
+
         DBentry = City(
             name=row["City"],
             lat=row["lat"],
             lng=row["lon"],
-            state=row["State"],
+            state_id=state_id,
             
         )
         DBentry.save()
     
     for row in DictReader(open("static/misc/TempDatabaseEntries.csv")):
-        city_id = City.objects.filter(name = row["City"]).values_list('id', flat=True)
+        
         if City.objects.filter(name = row["City"]).exists():
+            city_id = City.objects.filter(name = row["City"]).values_list('id', flat=True)
             print(city_id)
             DBentry = Complex(
                 city_name_id=city_id,
@@ -252,6 +263,9 @@ def createComplex(request):
             new_complex.lng = lng
             new_complex.save(update_fields=['lat','lng'])
             return redirect("complexLookup", city_name=new_complex.city_name.name, complex_id=new_complex.pk)
+        else:
+            print("form invalid")
+            print(form.errors)
     else:
         form = CreateComplexForm()
     context = {'form': form}
@@ -280,3 +294,11 @@ def extract_lat_long_via_address(address_or_zipcode):
     except:
         pass
     return lat, lng
+
+
+def load_cities(request):
+    state_id = request.GET.get('state')
+
+    #state_id = State.objects.filter(name = state_name).values_list('id', flat=True)
+    cities = list(City.objects.filter(state__pk=state_id).order_by('name'))
+    return render(request, 'city_dropdown_list_options.html', {'cities': cities})
