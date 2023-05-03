@@ -18,16 +18,19 @@
   <div class="container">
     <div class="row vh-nav ">
       <div class="row justify-content-center align-self-center">
-        <h1>Join</h1>
+        <h1>Register</h1>
         <div class="col-auto">
           <form class="form-horizontal" method="post">
             {% csrf_token %}
             {{ join_form|crispy }}
-            <div class="form-actions">
+            
+            <div class="form-actions" style="display: flex;align-items: center;justify-content: center;">
               <button type="submit" class="btn btn-primary mt-2">Submit</button>
+              
             </div>
+            <p class="text-center" >  Already a member? <a href="{% url 'login' %}?next=/">login</a> instead.</p>
           </form>
-          <p class="text-center">If you already have an account, <a href="{% url 'login' %}?next=/">login</a> instead.</p>
+          
         </div>
       </div>
     </div>

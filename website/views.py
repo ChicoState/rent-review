@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import City, Posts, Comments, User, Complex
 from django.db.models import Avg
 from .forms import CityForm, LoginForm, NewUserForm, CreateComplexForm, CommentForm, RateForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -199,13 +200,13 @@ def join(request):
 def user_login(request):
     print("in login function")
     if (request.method == 'POST'):
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             print("form is valid")
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
-            if user:
+            if user is not None:
                 if user.is_active:
                     login(request, user)
                     print("user loggedin")
