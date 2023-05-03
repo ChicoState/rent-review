@@ -1,7 +1,9 @@
 from django import forms
-from .models import Cities, Comments, Posts
+from .models import City,Complex, Comments, Posts
 from django.core import validators
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True, label='',
@@ -11,19 +13,26 @@ class CityForm(forms.Form):
                                  max_length=28)
 
     class Meta:
-        model = Cities
+        model = City
         
-class JoinForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'autocomplete': 'new-password'}))
-    email = forms.CharField(widget=forms.TextInput())
+class NewUserForm(UserCreationForm):
+    email = forms.EmailField(required=True)
 
-    class Meta():
+    class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'password')
-        help_texts = {
-            'username': None
-        }
+        fields = ('first_name', 'last_name', "username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(NewUserForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        if self.cleaned_data['password1'] != self.cleaned_data['password2']:
+            raise self.ValidationError('Passwords do not match')
+        user.password = self.cleaned_data['password1']
+        if commit:
+            user.save()
+        return user
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -56,8 +65,9 @@ class CreateComplexForm(forms.Form):
     zipcode = forms.IntegerField(max_value=99999, min_value=501)
 
     def save(self):
-        com = Cities()
-        com.name = self.cleaned_data["cityname"].capitalize()
+        com = Complex()
+        city = City.objects.get(name=self.cleaned_data["cityname"].capitalize())
+        com.city_name = city
         com.complex_name = self.cleaned_data["complexName"].capitalize()
         com.address = self.cleaned_data["address"].capitalize()
         com.url = self.cleaned_data["url"]
