@@ -68,21 +68,6 @@ class CreateComplexForm(forms.Form):
                        widget= forms.Select(attrs={'class': 'form-control input'}),)
     zipcode = forms.IntegerField(max_value=99999, min_value=501)
 
-<<<<<<< HEAD
-    class Meta:
-        unique_together = ["complexName"]
-
-    # def clean_complex_name(self): 
-    #     my_complex = self.cleaned_data.get('complexName')
-
-    #     for instance in Cities.objects.all(): 
-    #         if instance.my_complex == my_complex:
-    #             raise forms.ValidationError('Error')
-            
-    #     return my_complex
-
-
-=======
     def __init__(self, *args, **kwargs):
         super(CreateComplexForm,self).__init__(*args, **kwargs)
         #self.fields['city'].queryset = City.objects.none()
@@ -96,7 +81,6 @@ class CreateComplexForm(forms.Form):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         # elif self.instance.pk:
         #     self.fields['city'].queryset = City.objects.all().order_by('name')
->>>>>>> main
 
     def save(self):
         com = Complex()
