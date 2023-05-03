@@ -55,6 +55,20 @@ class CreateComplexForm(forms.Form):
     # IRS has lowest zip at 00501
     zipcode = forms.IntegerField(max_value=99999, min_value=501)
 
+    class Meta:
+        unique_together = ["complexName"]
+
+    # def clean_complex_name(self): 
+    #     my_complex = self.cleaned_data.get('complexName')
+
+    #     for instance in Cities.objects.all(): 
+    #         if instance.my_complex == my_complex:
+    #             raise forms.ValidationError('Error')
+            
+    #     return my_complex
+
+
+
     def save(self):
         com = Cities()
         com.name = self.cleaned_data["cityname"].capitalize()
