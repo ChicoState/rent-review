@@ -5,3 +5,4 @@ requests
 python-dotenv
 django-crispy-forms
 crispy-bootstrap4
+django-nose
