@@ -14,6 +14,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 import json
+import string
 
 init = False
 
@@ -32,7 +33,7 @@ def home(request):
         if form.is_valid():
             city_input = form.cleaned_data.get("city_input")
             if City.objects.filter(name__icontains=city_input).exists():
-                return redirect('city_lookup', city_name=city_input.capitalize())
+                return redirect('city_lookup', city_name=string.capwords(city_input))
             else:
                 print("City does not exist")
         else:
@@ -66,7 +67,7 @@ def cityLookup(request, city_name):
             coordinates.append(["%s" % c.complex_name,c.lat,c.lng])
         json_coordinates = json.dumps(coordinates)
         print(json_coordinates)
-        context = {"cities": complexs,"city_center":city_center, "coordinates":json_coordinates, "googleApiKey": os.environ.get('GOOGLE_MAPS_API_KEY'),}
+        context = {"city_name" : city_name ,"cities": complexs,"city_center":city_center, "coordinates":json_coordinates, "googleApiKey": os.environ.get('GOOGLE_MAPS_API_KEY'),}
         # for i in range(len(cities)):
         #     print(cities[i].name, cities[i].complex_name)
         return render(request, "complexDisplay.html", context=context)

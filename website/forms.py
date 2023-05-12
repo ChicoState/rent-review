@@ -4,6 +4,7 @@ from django.core import validators
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+import string
 
 class CityForm(forms.Form):
     city_input = forms.CharField(required=True, label='',
@@ -88,8 +89,8 @@ class CreateComplexForm(forms.Form):
         city_name = self.cleaned_data["city"]
         city = City.objects.get(name=city_name)
         com.city_name = city
-        com.complex_name = self.cleaned_data["complexName"].capitalize()
-        com.address = self.cleaned_data["address"].capitalize()
+        com.complex_name = string.capwords(self.cleaned_data["complexName"])
+        com.address = string.capwords(self.cleaned_data["address"])
         com.url = self.cleaned_data["url"]
         com.zipcode = self.cleaned_data["zipcode"]
         com.save()
