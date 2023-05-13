@@ -4,13 +4,16 @@ from website.views import home, cityLookup, complexLookup, postLookup, add_post,
 
 # Create your tests here.
 
-class TestStateModel(TestCase):
+class StateTestCase(TestCase):
     def setUp(self):
         State.objects.create(name = "California")
         
     def test_State_Object(self):
         CA = State.objects.get(name = "California")
         self.assertIsNotNone(CA)
+        
+    def test_smokefail(self):
+        self.assertTrue(False)
 
 class TestCityModel(TestCase):
     pass

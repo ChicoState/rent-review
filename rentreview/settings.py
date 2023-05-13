@@ -42,17 +42,8 @@ INSTALLED_APPS = [
     'star_ratings',
     'crispy_bootstrap4',
     'crispy_forms',
-    'django_nose',
 ]
 
-# Use nose to run all tests
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-# Tell nose to measure coverage on website app
-#python manage.py test --with-coverage
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=website',
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
