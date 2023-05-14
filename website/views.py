@@ -11,6 +11,7 @@ from django.utils.encoding import iri_to_uri
 from django.contrib import messages
 import requests
 import os
+import sys
 from dotenv import load_dotenv
 from pathlib import Path
 import json
@@ -25,7 +26,7 @@ if not init:
 
 def home(request):
     
-    if Complex.objects.all().count() == 0:
+    if Complex.objects.all().count() == 0 and 'test' not in sys.argv:
         init_testSet()
     if request.method == "POST":
         form = CityForm(request.POST)
@@ -214,6 +215,7 @@ def join(request):
 def user_login(request):
     print("in login function")
     if (request.method == 'POST'):
+        print(request.POST)
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             print("form is valid")
@@ -238,9 +240,8 @@ def user_login(request):
                 print("Someone tried to login and failed.")
                 print("They used username: {} and password: {}".format(username,password))
                 return render(request,  "login.html", {"form": LoginForm})
-    else:
-        print("initial render")
-        return render(request, "login.html", {"form": LoginForm})
+    print("initial render")
+    return render(request, "login.html", {"form": LoginForm})
 
 
 @login_required(login_url='login/')
