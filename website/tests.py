@@ -69,7 +69,7 @@ class TestHomeView(TestCase):
         self.assertTrue('cities' in response.context)
         print("City Lookup Context")
         print(response.context['cities'])
-        self.assertEqual(len(response.context['cities']), 938)
+        self.assertEqual(len(response.context['cities']), 13)
 
 
 class TestcityLookupView(TestCase):

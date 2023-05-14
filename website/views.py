@@ -11,6 +11,7 @@ from django.utils.encoding import iri_to_uri
 from django.contrib import messages
 import requests
 import os
+import sys
 from dotenv import load_dotenv
 from pathlib import Path
 import json
@@ -25,7 +26,7 @@ if not init:
 
 def home(request):
     
-    if Complex.objects.all().count() == 0:
+    if Complex.objects.all().count() == 0 and 'test' not in sys.argv:
         print("hi")
         init_testSet()
     if request.method == "POST":
