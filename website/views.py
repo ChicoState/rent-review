@@ -26,6 +26,7 @@ if not init:
 def home(request):
     
     if Complex.objects.all().count() == 0:
+        print("hi")
         init_testSet()
     if request.method == "POST":
         form = CityForm(request.POST)
