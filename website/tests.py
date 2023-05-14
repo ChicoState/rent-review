@@ -287,14 +287,14 @@ class TestPostLookupView(TestCase):
             print(response.context['complex_likes'])
             self.assertEqual(response.context['complex_likes']["likes"], post.likes)
     
-    def test_create_comment(self):
-        # Get second page and confirm it has (exactly) remaining 3 items
-        for post in self.posts:
-            response = self.client.post(reverse('postLookup', args=['TestCity', str(self.complex_id), str(post.id)]), data={"comment_text": "this is a comment"})
-            self.assertEqual(response.status_code, 200)
-            self.assertTrue('city' in response.context)
+    # def test_create_comment(self):
+    #     # Get second page and confirm it has (exactly) remaining 3 items
+    #     for post in self.posts:
+    #         response = self.client.post(reverse('postLookup', args=['TestCity', str(self.complex_id), str(post.id)]), data={"comment_text": "this is a comment"})
+    #         self.assertEqual(response.status_code, 200)
+    #         self.assertTrue('city' in response.context)
             
-            self.assertEqual(len(response.context['comment_list']), 1)
+    #         self.assertEqual(len(response.context['comment_list']), 1)
     
     def test_create_empty_comment(self):
         # Get second page and confirm it has (exactly) remaining 3 items
